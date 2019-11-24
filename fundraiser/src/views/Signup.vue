@@ -29,7 +29,7 @@
                         ></v-text-field>
 
                         <v-select
-                          v-model="select"
+                          v-model="selectAccount"
                           :items="accounts"
                           :rules="[v => !!v || 'Account type is required']"
                           label="Account Type"
@@ -75,7 +75,7 @@ export default {
         v => !!v || 'Password is required',
         v => (v && v.length >= 12) || "Password must be longer than 12 characters",
       ],
-      select: null,
+      selectAccount: null,
       accounts: [
         'Donor',
         'Organization'
@@ -88,6 +88,7 @@ export default {
         if (this.$refs.form.validate()) {
           console.log("Registered!")
           this.$router.push({ path: '/home' })
+          this.$emit('signup', [this.selectAccount, this.username])
         }
       },
       reset () {

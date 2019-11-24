@@ -6,7 +6,7 @@
           cols="2"
         >
           <v-btn
-            to = "/Create"
+            @click="createEvent"
           >
             New
           </v-btn>
@@ -25,7 +25,7 @@
               <div>
                 <v-btn
                   width = 400 px
-                  to = "/Account"
+                  to = "/account"
                 >
                   Event A
                 </v-btn>
@@ -34,7 +34,7 @@
               <div>
                 <v-btn
                   width = 400 px
-                  to = "/Account"
+                  to = "/account"
                 >
                   Event B
                 </v-btn>
@@ -43,7 +43,7 @@
               <div>
                 <v-btn
                   width = 400 px
-                  to = "/Account"
+                  to = "/account"
                 >
                   Event C
                 </v-btn>
@@ -61,7 +61,7 @@
               <div>
                 <v-btn
                   width = 400 px
-                  to = "/Account"
+                  to = "/account"
                 >
                   Event D
                 </v-btn>
@@ -70,7 +70,7 @@
               <div>
                 <v-btn
                   width = 400 px
-                  to = "/Account"
+                  to = "/account"
                 >
                   Event E
                 </v-btn>
@@ -79,7 +79,7 @@
               <div>
                 <v-btn
                   width = 400 px
-                  to = "/Account"
+                  to = "/account"
                 >
                   Event F
                 </v-btn>
@@ -97,8 +97,20 @@
 
 export default {
   name: 'Company',
-  components: {
-
+  props: {
+    userName: String
+  },
+  data: () => ({
+    selectEvent: null,
+  }),
+  methods: {
+    createEvent(){
+      this.$router.push({path: '/create/:' + this.userName})
+    },
+    visitEventPage(){
+      this.$router.push({path: '/account/:' + this.selectEvent})
+    }
   }
 }
+//TODO: Change events to list and use visitEventPage function
 </script>

@@ -87,7 +87,8 @@ export default {
       login () {
         if (this.$refs.form.validate()) {
           console.log("Logged in!")
-          this.$router.push({ path: '/home' })
+          this.$router.push({ path: '/home'})
+          this.$emit('login', [this.select, this.username])
         }
       },
       reset () {

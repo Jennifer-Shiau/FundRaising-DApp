@@ -7,14 +7,14 @@
 
       <v-spacer></v-spacer>
       <v-btn
-        to="/Home"
+        to="/home"
         text
       >
         <span class="mr-2">Home</span>
       </v-btn>
 
       <v-btn
-        to="/About"
+        to="/about"
         text
       >
         <span class="mr-2">About</span>
@@ -26,15 +26,15 @@
         <span class="mr-2">Events</span>
       </v-btn>
 
-      <v-btn v-if="signedIn"
-        to="/Account"
+      <v-btn v-if="loginStatus && accountType=='Donor'"
+        @click="displayAccount"
         text
       >
         <span class="mr-2">My Account</span>
       </v-btn>
 
-      <v-btn v-if="signedIn"
-        to="/Company"
+      <v-btn v-if="loginStatus && accountType=='Organization'"
+        @click="displayCompany"
         text
       >
         <span class="mr-2">Company</span>
@@ -53,17 +53,17 @@
       >
       </v-autocomplete>
 
-      <v-btn v-if="signedIn" class="mx-2" icon>
+      <v-btn v-if="loginStatus" class="mx-2" icon>
         <v-icon>mdi-account</v-icon>
       </v-btn>
 
       <div v-else>
-        <v-btn @click="toggleSignedIn"
+        <v-btn
           to="/login"
         >
           Log in
         </v-btn>
-        <v-btn @click="toggleSignedIn"
+        <v-btn
           to="/signup"
         >
           Sign up
@@ -75,13 +75,18 @@
 <script>
 export default {
   name: 'ToolBar',
-  data: () => ({
-    signedIn: false,
-  }),
+  props: {
+    accountType : String,
+    loginStatus : Boolean,
+    userName : String
+  },
   methods: {
-    toggleSignedIn() {
-      this.signedIn = !this.signedIn;
+    displayAccount(){
+      this.$router.push({ path: '/account/:' + this.userName})
     },
+    displayCompany(){
+      this.$router.push({ path: '/company/:' + this.userName})
+    }
   }
 }
 </script>

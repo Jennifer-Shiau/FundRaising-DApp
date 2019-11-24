@@ -10,7 +10,7 @@
         <v-col cols="6">
           <v-text-field
             label="Event name"
-            value=""
+            v-model="eventName"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -23,7 +23,7 @@
         <v-col cols="6">
           <v-text-field
             label="Target amount"
-            value=""
+            v-model="targetAmount"
             suffix="ETH"
           ></v-text-field>
         </v-col>
@@ -35,7 +35,7 @@
           <v-subheader style="font-size:18px">Category</v-subheader>
         </v-col>
         <v-col cols="8">
-          <v-radio-group v-model="row" row>
+          <v-radio-group v-model="selectCategory" row>
             <v-radio label="Category 1" value=""></v-radio>
             <v-radio label="Category 2" value=""></v-radio>
             <v-radio label="Category 3" value=""></v-radio>
@@ -45,7 +45,7 @@
       </v-row>
     </v-container>
     <v-btn
-      to = "/Company"
+      @click="toEventPage"
     >
       Create
     </v-btn>
@@ -57,8 +57,16 @@
 
 export default {
   name: 'Create',
-  components: {
-
+  data: () => ({
+    selectCategory : null,
+    eventName: "",
+    targetAmount: 0
+    // userName = $route.params.userName
+  }),
+  methods: {
+    visitEventPage(){
+      this.$router.push({path: '/account/:' + this.eventName})
+    }
   }
 }
 </script>
