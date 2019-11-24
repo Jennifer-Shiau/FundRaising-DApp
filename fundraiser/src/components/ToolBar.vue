@@ -57,12 +57,19 @@
         <v-icon>mdi-account</v-icon>
       </v-btn>
 
-      <v-btn v-else @click="toggleSignedIn"> 
-        Log in
-      </v-btn>
-      
+      <div v-else>
+        <v-btn @click="toggleSignedIn"
+          to="/login"
+        >
+          Log in
+        </v-btn>
+        <v-btn @click="toggleSignedIn"
+          to="/signup"
+        >
+          Sign up
+        </v-btn>
+      </div>
     </v-app-bar>
-
 </template>
 
 <script>

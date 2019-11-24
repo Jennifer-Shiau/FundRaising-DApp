@@ -1,10 +1,12 @@
 <template>
-  <div id="app">
-    <ToolBar></ToolBar>
-    <v-sheet>
-      <router-view></router-view>
-    </v-sheet>
-  </div>
+  <v-app>
+    <div id="app">
+      <ToolBar></ToolBar>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </div>
+  </v-app>
 </template>
 
 <script>
@@ -24,5 +26,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  align-content: center;
+  justify-content: center;
 }
 </style>
