@@ -43,7 +43,7 @@
           cols="6"
           md="4"
         >
-          <v-btn>Save Money</v-btn>
+          <v-btn>Deposit</v-btn>
         </v-col>
       </v-row>
     </v-container>

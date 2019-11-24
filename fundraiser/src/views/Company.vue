@@ -8,7 +8,7 @@
           <v-btn
             @click="createEvent"
           >
-            New
+            Create Event
           </v-btn>
         </v-col>
       </v-row>
@@ -20,19 +20,15 @@
           cols="6"
         >
           <h2>Ongoing Events</h2><br>
-          <v-list>
-            <v-list-item-group v-model="selectEvent">
+          <v-list class="elevation-1">
+            <v-list-item-group>
               <v-list-item
                 v-for="(event, i) in ongoingEvents"
                 :key="i"
+                @click="visitEventPage(event)"
               >
                 <v-list-item-content>
-                  <v-btn
-                    @click="visitEventPage"
-                    width = 400 px
-                  >
                     {{ event }}
-                  </v-btn>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -43,19 +39,15 @@
           cols="6"
         >
           <h2>Past Events</h2><br>
-          <v-list>
-            <v-list-item-group v-model="selectEvent">
+          <v-list class="elevation-1">
+            <v-list-item-group>
               <v-list-item
                 v-for="(event, i) in pastEvents"
                 :key="i"
+                @click="visitEventPage(event)"
               >
                 <v-list-item-content>
-                  <v-btn
-                    @click="visitEventPage"
-                    width = 400 px
-                  >
                     {{ event }}
-                  </v-btn>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -75,7 +67,6 @@ export default {
     userName: String
   },
   data: () => ({
-    selectEvent: 1,
     ongoingEvents: [
       'Event A',
       'Event B',
@@ -91,7 +82,8 @@ export default {
     createEvent(){
       this.$router.push({path: '/create/:' + this.userName})
     },
-    visitEventPage(){
+    visitEventPage(event){
+      this.selectEvent = event
       this.$router.push({path: '/account/:' + this.selectEvent})
     }
   }
