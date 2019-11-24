@@ -32,6 +32,13 @@
       >
         <span class="mr-2">My Account</span>
       </v-btn>
+
+      <v-btn v-if="signedIn"
+        to="/Company"
+        text
+      >
+        <span class="mr-2">Company</span>
+      </v-btn>
       
       <v-spacer></v-spacer>
 
