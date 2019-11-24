@@ -5,7 +5,7 @@
              <v-card align="center">
                 <v-responsive :aspect-ratio="2/1">
                   <v-card-text>
-                    <h2>Login</h2>
+                    <h2 class="font-weight-light display-1">Login</h2>
                   </v-card-text>
                   <v-container>
                       <v-form
