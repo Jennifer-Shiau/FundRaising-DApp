@@ -1,54 +1,63 @@
 <template>
   <div class="create">
-    <br><h2>Create new event</h2><br>
-    <v-container>
-      <v-row>
-        <v-col cols="2"></v-col>
-        <v-col cols="2">
-          <v-subheader style="font-size:18px">Name</v-subheader>
-        </v-col>
-        <v-col cols="6">
-          <v-text-field
-            label="Event name"
-            v-model="eventName"
-          ></v-text-field>
-        </v-col>
-      </v-row>
+    <v-container height="200">
+        <v-layout row wrap align-center>
+            <v-flex xs12 sm6 offset-sm3>
+             <v-card align="center">
+                <v-responsive :aspect-ratio="2/1">
+                  <v-card-text>
+                    <h2 class="font-weight-light display-1">Create new event</h2>
+                  </v-card-text>
+                  <v-container>
+                      <v-form
+                        ref="form"
+                        v-model="valid"
+                        :lazy-validation="lazy"
+                      >
+                        <v-text-field
+                          v-model="eventName"
+                          :counter="50"
+                          :rules="eventNameRules"
+                          label="Event name"
+                          required
+                        ></v-text-field>
 
-      <v-row>
-        <v-col cols="2"></v-col>
-        <v-col cols="2">
-          <v-subheader style="font-size:18px">Amount</v-subheader>
-        </v-col>
-        <v-col cols="6">
-          <v-text-field
-            label="Target amount"
-            v-model="targetAmount"
-            suffix="ETH"
-          ></v-text-field>
-        </v-col>
-      </v-row>
+                        <v-text-field
+                            v-model="targetAmount"
+                            :rules="targetAmountRules"
+                            label="Target amount"
+                            suffix="ETH"
+                            required
+                        ></v-text-field>
 
-      <v-row>
-        <v-col cols="2"></v-col>
-        <v-col cols="2">
-          <v-subheader style="font-size:18px">Category</v-subheader>
-        </v-col>
-        <v-col cols="8">
-          <v-radio-group v-model="selectCategory" row>
-            <v-radio label="Category 1" value=""></v-radio>
-            <v-radio label="Category 2" value=""></v-radio>
-            <v-radio label="Category 3" value=""></v-radio>
-            <v-radio label="Other" value=""></v-radio>
-          </v-radio-group>
-        </v-col>
-      </v-row>
+                        <v-select
+                          v-model="selectCategory"
+                          :items="categories"
+                          :rules="[v => !!v || 'Category is required']"
+                          label="Category"
+                          required
+                        ></v-select>
+
+                        <v-btn
+                          class="mr-4"
+                          @click="toEventPage"
+                        >
+                          Create
+                        </v-btn>
+
+                        <v-btn
+                          class="mr-4"
+                          @click="reset"
+                        >
+                          Reset Form
+                        </v-btn>
+                    </v-form>
+                  </v-container>
+                </v-responsive>
+              </v-card>
+            </v-flex>
+        </v-layout>
     </v-container>
-    <v-btn
-      @click="toEventPage"
-    >
-      Create
-    </v-btn>
   </div>
 </template>
 
@@ -59,13 +68,33 @@ export default {
   name: 'Create',
   data: () => ({
     selectCategory : null,
+    valid: true,
     eventName: "",
-    targetAmount: 0
+    eventNameRules: [
+      v => !!v || 'Event name is required',
+      v => (v && v.length <= 50) || 'Event name must be less than 50 characters',
+    ],
+    targetAmount: "",
+    targetAmountRules: [
+      v => !!v || 'Target amount is required',
+    ],
+    categories: [
+      'Natural Disasters',
+      'Causes',
+      'Donations',
+      'Investments'
+    ],
+    lazy: false,
     // userName = $route.params.userName
   }),
   methods: {
-    visitEventPage(){
-      this.$router.push({path: '/account/:' + this.eventName})
+    toEventPage(){
+      if (this.$refs.form.validate()) {
+        this.$router.push({path: '/account/:' + this.eventName})
+      }
+    },
+    reset () {
+      this.$refs.form.reset()
     }
   }
 }
