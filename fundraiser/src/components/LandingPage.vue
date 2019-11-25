@@ -37,7 +37,7 @@
                   <v-list-item
                     v-for="(event, i) in events"
                     :key="i"
-                    to="/account"
+                    :to="{path: '/account/:' + event.name}"
                   >
                     <v-list-item-content>
                       <v-card class="text-left justify-center align-center elevation-1">
