@@ -73,7 +73,7 @@ export default {
       password: '',
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 12) || "Password must be longer than 12 characters",
+        v => (v && v.length >= 6) || "Password must be longer than 12 characters",
       ],
       selectAccount: null,
       accounts: [
