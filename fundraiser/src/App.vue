@@ -5,10 +5,13 @@
         v-bind:login-status="loginStatus"
         v-bind:account-type="accountType"
         v-bind:user-name="userName"
+        @logout="changeToolBar"
       >
       </ToolBar>
       <v-container fluid>
-        <router-view @login="changeToolBar" @signup="changeToolBar" v-bind:user-name="userName"></router-view>
+        <router-view @login="changeToolBar" @signup="changeToolBar" 
+          v-bind:user-name="userName"
+        ></router-view>
       </v-container>
     </div>
   </v-app>
@@ -27,8 +30,8 @@ export default {
     methods: {
       changeToolBar(arg){
         this.accountType = arg[0]
-        this.loginStatus = true
-        this.userName = arg[1]
+        this.loginStatus = arg[1]
+        this.userName = arg[2]
       }
     }
 };

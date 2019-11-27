@@ -53,9 +53,31 @@
       >
       </v-autocomplete>
 
-      <v-btn v-if="loginStatus" class="mx-2" icon>
-        <v-icon>mdi-account</v-icon>
-      </v-btn>
+      <v-menu v-if="loginStatus"
+        :close-on-click="closeOnClick"
+        :close-on-content-click="closeOnContentClick"
+        :offset-y="offsetY"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn class="mx-2" 
+           icon v-on="on"
+          >
+            <v-icon>mdi-account</v-icon>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(option, index) in dropDown"
+            :key="index"
+            @click=triggerDropDown(index)
+          >
+            <v-list-item-title>{{ option.title }}</v-list-item-title>
+            <v-list-item-avatar>
+              <v-icon>{{ option.icon }}</v-icon>
+            </v-list-item-avatar>
+          </v-list-item>
+        </v-list>
+      </v-menu>
 
       <div v-else>
         <v-btn
@@ -80,13 +102,33 @@ export default {
     loginStatus : Boolean,
     userName : String
   },
+  data: () => ({
+    dropDown : [
+      {title: "Settings", icon: "mdi-settings"},
+      {title: "Log Out", icon: "mdi-logout"},
+    ],
+    closeOnClick : true,
+    closeOnContentClick : true,
+    offsetY : true,
+  }),
   methods: {
     displayAccount(){
       this.$router.push({ path: '/account/:' + this.userName})
     },
     displayCompany(){
       this.$router.push({ path: '/company/:' + this.userName})
-    }
+    },
+    triggerDropDown(arg){
+      if (arg == 0){
+        //settings
+      } else if (arg == 1){ //logout
+        if (this.$router.currentRoute.path != "/home"){
+          this.$router.push({ path: '/home'})
+        }
+        this.$emit('logout', ["", false, ""])
+        // console.log("logged out")
+      }
+    },
   }
 }
 </script>

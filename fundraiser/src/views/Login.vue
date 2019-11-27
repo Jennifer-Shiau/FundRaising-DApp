@@ -86,9 +86,9 @@ export default {
     methods: {
       login () {
         if (this.$refs.form.validate()) {
-          console.log("Logged in!")
+          // console.log("Logged in!")
           this.$router.push({ path: '/home'})
-          this.$emit('login', [this.select, this.username])
+          this.$emit('login', [this.select, true, this.username])
         }
       },
       reset () {

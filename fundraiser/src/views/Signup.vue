@@ -86,9 +86,9 @@ export default {
     methods: {
       login () {
         if (this.$refs.form.validate()) {
-          console.log("Registered!")
+          // console.log("Registered!")
           this.$router.push({ path: '/home' })
-          this.$emit('signup', [this.selectAccount, this.username])
+          this.$emit('signup', [this.selectAccount, true, this.username])
         }
       },
       reset () {
