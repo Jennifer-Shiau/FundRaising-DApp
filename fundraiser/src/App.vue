@@ -11,6 +11,8 @@
       <v-container fluid>
         <router-view @login="changeToolBar" @signup="changeToolBar" 
           v-bind:user-name="userName"
+          v-bind:login-status="loginStatus"
+          v-bind:account-type="accountType"
         ></router-view>
       </v-container>
     </div>

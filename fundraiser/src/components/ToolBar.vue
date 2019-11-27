@@ -113,7 +113,8 @@ export default {
   }),
   methods: {
     displayAccount(){
-      this.$router.push({ path: '/account/:' + this.userName})
+      this.$router.push({name: 'Account', params: {accountType:"Donor", displayType: "Donor",
+        displayName:this.userName}})
     },
     displayCompany(){
       this.$router.push({ path: '/company/:' + this.userName})
@@ -126,7 +127,6 @@ export default {
           this.$router.push({ path: '/home'})
         }
         this.$emit('logout', ["", false, ""])
-        // console.log("logged out")
       }
     },
   }

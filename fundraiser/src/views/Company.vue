@@ -64,7 +64,8 @@
 export default {
   name: 'Company',
   props: {
-    userName: String
+    userName: String,
+    loginStatus: Boolean
   },
   data: () => ({
     ongoingEvents: [
@@ -80,11 +81,12 @@ export default {
   }),
   methods: {
     createEvent(){
-      this.$router.push({path: '/create/:' + this.userName})
+      this.$router.push({name: 'Create', params: {loginStatus: this.loginStatus, creator: this.userName}})
     },
     visitEventPage(event){
       this.selectEvent = event
-      this.$router.push({path: '/account/:' + this.selectEvent})
+      this.$router.push({name: 'Account', params: {accountType:"Organization", displayName:this.selectEvent, 
+        displayType: "Event",loginStatus: this.loginStatus}})
     }
   }
 }

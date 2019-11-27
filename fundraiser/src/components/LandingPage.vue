@@ -37,7 +37,7 @@
                   <v-list-item
                     v-for="(event, i) in events"
                     :key="i"
-                    :to="{path: '/account/:' + event.name}"
+                    @click="visitEventPage(event.name)"
                   >
                     <v-list-item-content>
                       <v-card class="text-left justify-center align-center elevation-1">
@@ -83,7 +83,10 @@
 <script>
 export default {
   name: 'LandingPage',
-
+  props:{
+    accountType: String,
+    loginStatus: Boolean
+  },
   data: () => ({
     selectCategory: null,
     categories: [
@@ -99,5 +102,12 @@ export default {
       { name: 'Event C', company: "Red Cross", intro: "Raise funds for earthquake", progress:76},
     ],
   }),
+  methods: {
+    visitEventPage(event){
+      this.selectEvent = event
+      this.$router.push({name: 'Account', params: {displayType:"Event", displayName:this.selectEvent, 
+        accountType: this.accountType,loginStatus: this.loginStatus}})
+    }
+  }
 };
 </script>

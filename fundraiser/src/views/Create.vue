@@ -66,6 +66,10 @@
 
 export default {
   name: 'Create',
+  props: {
+    loginStatus: Boolean,
+    creator: String //not used
+  },
   data: () => ({
     selectCategory : null,
     valid: true,
@@ -85,12 +89,12 @@ export default {
       'Investments'
     ],
     lazy: false,
-    // userName = $route.params.userName
   }),
   methods: {
     toEventPage(){
       if (this.$refs.form.validate()) {
-        this.$router.push({path: '/account/:' + this.eventName})
+        this.$router.push({name: 'Account', params: {accountType:"Organization", displayName:this.eventName, 
+          displayType: "Event", loginStatus: this.loginStatus}})
       }
     },
     reset () {

@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <LandingPage/>
+    <LandingPage 
+      v-bind:login-status="loginStatus"
+      v-bind:account-type="accountType"
+    ></LandingPage>
   </div>
 </template>
 
@@ -10,6 +13,10 @@ import LandingPage from '@/components/LandingPage.vue'
 
 export default {
   name: 'Home',
+  props: {
+    loginStatus: Boolean,
+    accountType: String
+  },
   components: {
     LandingPage,
   }

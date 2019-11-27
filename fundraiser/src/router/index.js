@@ -13,7 +13,8 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Home
+    component: Home,
+    props: true
   },
   {
     path: '/about',
@@ -26,17 +27,20 @@ const routes = [
   {
     path: '/account/:id',
     name: 'Account',
-    component: () => import(/* webpackChunkName: "account" */ '../views/Account.vue')
+    component: () => import(/* webpackChunkName: "account" */ '../views/Account.vue'),
+    props: true
   },
   {
     path: '/company/:id',
     name: 'Company',
-    component: () => import(/* webpackChunkName: "company" */ '../views/Company.vue')
+    component: () => import(/* webpackChunkName: "company" */ '../views/Company.vue'),
+    props: true
   },
   {
     path: '/create/:id',
     name: 'Create',
-    component: () => import(/* webpackChunkName: "create" */ '../views/Create.vue')
+    component: () => import(/* webpackChunkName: "create" */ '../views/Create.vue'),
+    props: true
   },
   {
     path: '/login',

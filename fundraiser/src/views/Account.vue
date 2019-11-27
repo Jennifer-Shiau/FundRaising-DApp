@@ -1,6 +1,7 @@
 <template>
   <div class="account">
-    <v-container>
+    <v-container fluid>
+      <h2 class="font-weight-light display-1">{{ displayName }}</h2>
       <v-row>
         <v-col
           cols="12"
@@ -39,11 +40,17 @@
           </v-expansion-panels>
         </v-col>
         
-        <v-col
+        <v-col v-if="displayType=='Donor' && accountType=='Donor' && loginStatus"
           cols="6"
           md="4"
         >
           <v-btn>Deposit</v-btn>
+        </v-col>
+        <v-col v-if="displayType=='Event' && accountType=='Donor' && loginStatus"
+          cols="6"
+          md="4"
+        >
+          <v-btn>Donate</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -55,8 +62,11 @@
 
 export default {
   name: 'Account',
-  components: {
-
-  }
+  props: {
+    accountType: String, //Organization or Donor
+    displayType: String, //Event or Donor
+    loginStatus: Boolean,
+    displayName: String//Event name or donor name
+  },
 }
 </script>
