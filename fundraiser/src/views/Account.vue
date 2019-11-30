@@ -40,13 +40,7 @@
           </v-expansion-panels>
         </v-col>
         
-        <v-col v-if="displayType=='Donor' && accountType=='Donor' && loginStatus"
-          cols="6"
-          md="4"
-        >
-          <v-btn>Deposit</v-btn>
-        </v-col>
-        <v-col v-if="displayType=='Event' && accountType=='Donor' && loginStatus"
+        <v-col v-if="displayType=='Event' && accountType!='Organization'"
           cols="6"
           md="4"
         >

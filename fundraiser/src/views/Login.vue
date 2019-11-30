@@ -28,14 +28,6 @@
                             required
                         ></v-text-field>
 
-                        <v-select
-                          v-model="select"
-                          :items="accounts"
-                          :rules="[v => !!v || 'Account type is required']"
-                          label="Account Type"
-                          required
-                        ></v-select>
-
                         <v-btn
                           class="mr-4"
                           @click="login"
@@ -75,11 +67,7 @@ export default {
         v => !!v || 'Password is required',
         v => (v && v.length >= 6) || "Password must be longer than 12 characters",
       ],
-      select: null,
-      accounts: [
-        'Donor',
-        'Organization'
-      ],
+      select: 'Organization',
       lazy: false,
     }),
 

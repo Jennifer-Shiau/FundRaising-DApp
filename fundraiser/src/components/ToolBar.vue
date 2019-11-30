@@ -26,13 +26,6 @@
         <span class="mr-2">Events</span>
       </v-btn>
 
-      <v-btn v-if="loginStatus && accountType=='Donor'"
-        @click="displayAccount"
-        text
-      >
-        <span class="mr-2">My Account</span>
-      </v-btn>
-
       <v-btn v-if="loginStatus && accountType=='Organization'"
         @click="displayCompany"
         text
@@ -112,12 +105,8 @@ export default {
     offsetY : true,
   }),
   methods: {
-    displayAccount(){
-      this.$router.push({name: 'Account', params: {accountType:"Donor", displayType: "Donor",
-        displayName:this.userName}})
-    },
     displayCompany(){
-      this.$router.push({ path: '/company/:' + this.userName})
+      this.$router.push({name: 'Company', params: {loginStatus: this.loginStatus, userName: this.userName}})
     },
     triggerDropDown(arg){
       if (arg == 0){
