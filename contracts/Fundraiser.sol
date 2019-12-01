@@ -58,7 +58,7 @@ contract Fundraiser is ERC20 {
 
   function donate(address _donor, address payable _event, uint _amount) public {
     // donate to event
-    require(_donor.balance >= _amount, "Donor does not have enough ethers!");
+    require(balanceOf(_donor) >= _amount, "Donor does not have enough ethers!");
     uint _id = addr2EventId[_event] - 1;
     require(eventList[_id]._ongoing == true, "The event has ended.");
 		require(msg.sender == _donor, "Sender should be donor!");
