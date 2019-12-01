@@ -1,15 +1,7 @@
 const Fundraiser = artifacts.require('../contracts/Fundraiser.sol');
 
 contract('Fundraiser', function (accounts) {
-  let contract;
-
-  // execute before each test and will deploy a new instance of the smart contract
-  // ensures each test is executed against a clean contract state
-  // beforeEach(async () => {
-  //   contract = await Fundraiser.new()
-  // })
-  contract = await Fundraiser.deployed();
-
+  
   // for organization
   const _name = "aabbcc";
   const _password = "112233";
@@ -18,21 +10,24 @@ contract('Fundraiser', function (accounts) {
   const _creator = _name;
   const _intro = "Event for testing";
   const _targetAmount = 1000;
-  const _eventAddress = 0x0;
+  const _eventAddress = accounts[1];
   // for donate
   const _donor = accounts[0];
   const _event = _eventAddress;
-  const _amount = 100;
+  const _amount = 1000;
 
   it('Create an organization', async () => {
-    let result = await contract.createOrganization(_name, _password).send();
-    assert.equal(result, true);
+    let contract = await Fundraiser.deployed();
+    await contract.createOrganization(_name, _password, {from:accounts[0]});
+    let result = await contract.creatorName2Hash(_name);
+    assert.notEqual(result, 0);
   })
 
   it('Check valid creator name', async () => {
+    let contract = await Fundraiser.deployed();
     let result = true;
     try {
-      result = await contract.createOrganization(_name, _password).send();
+      await contract.createOrganization(_name, _password, {from:accounts[0]});
     }
     catch(error) {
       result = false;
@@ -41,25 +36,44 @@ contract('Fundraiser', function (accounts) {
   })
 
   it('Create an event', async () => {
-    let result = await contract.createEvent(_eventName, _creator, _intro, _targetAmount, _eventAddress).send();
-    assert.equal(result, true);
+    let contract = await Fundraiser.deployed();
+    await contract.createEvent(_eventName, _creator, _intro, _targetAmount, _eventAddress, {from:accounts[0]});
+    let result = await contract.addr2EventId(_eventAddress);
+    assert.equal(result, 1);
   })
 
   it('Donate to an event', async () => {
-    await contract.donate(_donor, _event, _amount).send();
-    let received = await contract.getReceivedAmount(_event).call();
-    let balance = await contract.getBalance(_event).call();
+    let contract = await Fundraiser.deployed();
+    // _ongoing should be true
+    let eventId = await contract.addr2EventId(_event) - 1;
+    let event = await contract.eventList(eventId);
+    assert.equal(event._ongoing, true);
+    // donate
+    await contract.donate(_donor, _event, _amount, {from:accounts[0]});
+    let received = await contract.getReceivedAmount(_event);
+    let balance = await contract.getBalance(_event);
+    assert.equal(_amount, 1000);
     assert.equal(received, _amount);
     assert.equal(balance, _amount);
+    // get event again, _ongoing should be false
+    event = await contract.eventList(eventId);
+    assert.equal(event._ongoing, false);
+    // ckeck donor balance
+    let donorBalance = await contract.getBalance(_donor);
+    let initialBalance = await contract._initialBalance();
+    let expected = initialBalance - _amount;
+    assert.equal(initialBalance, 10000);
+    assert.equal(expected, 10000 - 1000);
+    assert.equal(donorBalance, expected);
   })
 
   it('Get event list', async () => {
-    let eventList = await contract.eventList();
-
+    let contract = await Fundraiser.deployed();
+    let len = await contract.getEventListLength();
     var count = 0;
-    var i;
-    for(i = 0; i < eventList.length; i++) { 
-      if(eventList[i]._creator === _creator) {
+    for(var i = 0; i < len; i++) {
+      let event = await contract.eventList(i);
+      if(event._creator === _creator) {
         count += 1;
       }
     }
