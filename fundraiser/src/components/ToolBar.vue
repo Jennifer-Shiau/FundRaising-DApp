@@ -26,7 +26,7 @@
         <span class="mr-2">Events</span>
       </v-btn>
 
-      <v-btn v-if="loginStatus && accountType=='Organization'"
+      <v-btn v-if="loginStatus"
         @click="displayCompany"
         text
       >
@@ -91,7 +91,6 @@
 export default {
   name: 'ToolBar',
   props: {
-    accountType : String,
     loginStatus : Boolean,
     userName : String
   },
@@ -115,7 +114,7 @@ export default {
         if (this.$router.currentRoute.path != "/home"){
           this.$router.push({ path: '/home'})
         }
-        this.$emit('logout', ["", false, ""])
+        this.$emit('logout', [false, ""])
       }
     },
   }

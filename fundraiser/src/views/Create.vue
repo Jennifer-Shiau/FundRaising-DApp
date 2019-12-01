@@ -93,8 +93,7 @@ export default {
   methods: {
     toEventPage(){
       if (this.$refs.form.validate()) {
-        this.$router.push({name: 'Account', params: {accountType:"Organization", displayName:this.eventName, 
-          displayType: "Event", loginStatus: this.loginStatus}})
+        this.$router.push({name: 'Account', params: {eventName :this.eventName, loginStatus: this.loginStatus}})
       }
     },
     reset () {

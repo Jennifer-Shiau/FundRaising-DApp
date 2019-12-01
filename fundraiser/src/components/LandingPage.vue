@@ -84,7 +84,6 @@
 export default {
   name: 'LandingPage',
   props:{
-    accountType: String,
     loginStatus: Boolean
   },
   data: () => ({
@@ -105,8 +104,7 @@ export default {
   methods: {
     visitEventPage(event){
       this.selectEvent = event
-      this.$router.push({name: 'Account', params: {displayType:"Event", displayName:this.selectEvent, 
-        accountType: this.accountType,loginStatus: this.loginStatus}})
+      this.$router.push({name: 'Account', params: {eventName:this.selectEvent, loginStatus: this.loginStatus}})
     }
   }
 };

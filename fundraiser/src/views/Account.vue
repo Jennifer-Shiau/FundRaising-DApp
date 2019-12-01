@@ -1,7 +1,7 @@
 <template>
   <div class="account">
     <v-container fluid>
-      <h2 class="font-weight-light display-1">{{ displayName }}</h2>
+      <h2 class="font-weight-light display-1">{{ eventName }}</h2>
       <v-row>
         <v-col
           cols="12"
@@ -40,7 +40,7 @@
           </v-expansion-panels>
         </v-col>
         
-        <v-col v-if="displayType=='Event' && accountType!='Organization'"
+        <v-col v-if="!loginStatus"
           cols="6"
           md="4"
         >
@@ -57,10 +57,8 @@
 export default {
   name: 'Account',
   props: {
-    accountType: String, //Organization or Donor
-    displayType: String, //Event or Donor
     loginStatus: Boolean,
-    displayName: String//Event name or donor name
+    eventName: String//Event name or donor name
   },
 }
 </script>

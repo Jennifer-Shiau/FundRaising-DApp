@@ -85,8 +85,7 @@ export default {
     },
     visitEventPage(event){
       this.selectEvent = event
-      this.$router.push({name: 'Account', params: {accountType:"Organization", displayName:this.selectEvent, 
-        displayType: "Event",loginStatus: this.loginStatus}})
+      this.$router.push({name: 'Account', params: {eventName:this.selectEvent, loginStatus: this.loginStatus}})
     }
   }
 }

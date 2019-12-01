@@ -67,21 +67,14 @@ export default {
         v => !!v || 'Password is required',
         v => (v && v.length >= 6) || "Password must be longer than 12 characters",
       ],
-      selectAccount: 'Organization',
-      // selectAccount: null,
-      // accounts: [
-      //   'Donor',
-      //   'Organization'
-      // ],
       lazy: false,
     }),
 
     methods: {
       login () {
         if (this.$refs.form.validate()) {
-          // console.log("Registered!")
           this.$router.push({ path: '/home' })
-          this.$emit('signup', [this.selectAccount, true, this.username])
+          this.$emit('signup', [true, this.username])
         }
       },
       reset () {

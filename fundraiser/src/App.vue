@@ -3,7 +3,6 @@
     <div id="app">
       <ToolBar 
         v-bind:login-status="loginStatus"
-        v-bind:account-type="accountType"
         v-bind:user-name="userName"
         @logout="changeToolBar"
       >
@@ -12,7 +11,6 @@
         <router-view @login="changeToolBar" @signup="changeToolBar" 
           v-bind:user-name="userName"
           v-bind:login-status="loginStatus"
-          v-bind:account-type="accountType"
         ></router-view>
       </v-container>
     </div>
@@ -26,14 +24,12 @@ export default {
     name: 'App',
     data: () => ({
       loginStatus: false,
-      accountType: "",
       userName: ""
     }),
     methods: {
       changeToolBar(arg){
-        this.accountType = arg[0]
-        this.loginStatus = arg[1]
-        this.userName = arg[2]
+        this.loginStatus = arg[0]
+        this.userName = arg[1]
       }
     }
 };

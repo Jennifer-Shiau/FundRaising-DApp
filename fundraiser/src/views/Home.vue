@@ -2,7 +2,6 @@
   <div class="home">
     <LandingPage 
       v-bind:login-status="loginStatus"
-      v-bind:account-type="accountType"
     ></LandingPage>
   </div>
 </template>
@@ -15,7 +14,6 @@ export default {
   name: 'Home',
   props: {
     loginStatus: Boolean,
-    accountType: String
   },
   components: {
     LandingPage,

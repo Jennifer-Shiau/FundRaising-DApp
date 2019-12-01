@@ -67,7 +67,6 @@ export default {
         v => !!v || 'Password is required',
         v => (v && v.length >= 6) || "Password must be longer than 12 characters",
       ],
-      select: 'Organization',
       lazy: false,
     }),
 
@@ -76,7 +75,7 @@ export default {
         if (this.$refs.form.validate()) {
           // console.log("Logged in!")
           this.$router.push({ path: '/home'})
-          this.$emit('login', [this.select, true, this.username])
+          this.$emit('login', [true, this.username])
         }
       },
       reset () {
