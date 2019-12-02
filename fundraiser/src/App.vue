@@ -19,17 +19,42 @@
 
 <script>
 import ToolBar from './components/ToolBar';
+import getWeb3 from "./utils/getWeb3";
+import Fundraiser from "../../build/contracts/Fundraiser.json"
+
 export default {
     components: { ToolBar },
     name: 'App',
     data: () => ({
       loginStatus: false,
-      userName: ""
+      userName: "",
+      state: {
+        web3: {},
+        accounts: [],
+        contract: {}
+      },
     }),
     methods: {
       changeToolBar(arg){
         this.loginStatus = arg[0]
         this.userName = arg[1]
+      },
+    },
+    async mounted(){
+      try {
+        this.state.web3 = await getWeb3();
+        this.state.accounts = await this.state.web3.eth.getAccounts();
+        const networkId = await this.state.web3.eth.net.getId();
+        const deployedNetwork = Fundraiser.networks[networkId];
+        this.state.contract = new this.state.web3.eth.Contract(
+          Fundraiser.abi,
+          deployedNetwork && deployedNetwork.address,
+        );
+      } catch (error) {
+        alert(
+          `Failed to load web3, accounts, or contract. Check console for details.`,
+        );
+        console.error(error);
       }
     }
 };
