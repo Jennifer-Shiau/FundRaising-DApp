@@ -70,13 +70,20 @@ contract('Fundraiser', function (accounts) {
   it('Get event list', async () => {
     let contract = await Fundraiser.deployed();
     let len = await contract.getEventListLength();
-    var count = 0;
+    var ongoingCount = 0;
+    var pastCount = 0;
     for(var i = 0; i < len; i++) {
       let event = await contract.eventList(i);
       if(event._creator === _creator) {
-        count += 1;
+        if(event._ongoing === true) {
+          ongoingCount += 1;
+        }
+        else {
+          pastCount += 1;
+        }
       }
     }
-    assert.equal(count, 1);
+    assert.equal(ongoingCount, 0);
+    assert.equal(pastCount, 1);
   })
 })
