@@ -8,8 +8,11 @@
       >
       </ToolBar>
       <v-container fluid>
+        <v-btn @click="callContract"
+        >Call contract</v-btn>
         <router-view @login="changeToolBar" @signup="changeToolBar" 
           v-bind:user-name="userName"
+          v-bind:state="state"
           v-bind:login-status="loginStatus"
         ></router-view>
       </v-container>
@@ -39,13 +42,32 @@ export default {
         this.loginStatus = arg[0]
         this.userName = arg[1]
       },
+      async callContract(){//for debugging
+        try {
+          // console.log(this.state)
+          var self = this.state.accounts[0]
+          console.log(self)
+          // var res = await this.state.contract.methods.createEvent("_eventName", "_creator", "_intro", 20, "0xCaC63831dc569F66109ee5f53aF1E5CF16E01EDE").send({from:self})
+          // console.log(res)
+          // await this.state.contract.methods.createOrganization("name", "pswd").send({from:self})
+          var b1 = await this.state.contract.methods.getBalance(this.state.accounts[0]).call({from:self})
+          console.log(b1)
+          await this.state.contract.methods.donate(self, "0xdfC9aa8396Bb178CA60142E6532F4128dAd92781", 10).send({from:self})
+          // await this.state.contract.methods.donate(account, 0xdfC9aa8396Bb178CA60142E6532F4128dAd92781, 100).send()
+          console.log("Success!")
+        } catch (error) {
+          alert('Fail!')
+          console.log(error)
+        }
+      }
     },
     async mounted(){
       try {
         this.state.web3 = await getWeb3();
         this.state.accounts = await this.state.web3.eth.getAccounts();
         const networkId = await this.state.web3.eth.net.getId();
-        const deployedNetwork = Fundraiser.networks[networkId];
+        const deployedNetwork = await Fundraiser.networks[networkId];
+        console.log(deployedNetwork.address)
         this.state.contract = new this.state.web3.eth.Contract(
           Fundraiser.abi,
           deployedNetwork && deployedNetwork.address,

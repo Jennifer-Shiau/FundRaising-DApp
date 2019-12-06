@@ -84,7 +84,8 @@
 export default {
   name: 'LandingPage',
   props:{
-    loginStatus: Boolean
+    loginStatus: Boolean,
+    state: Object
   },
   data: () => ({
     selectCategory: null,
@@ -100,11 +101,30 @@ export default {
       { name: 'Event B', company: "Red Cross", intro: "Raise funds for earthquake", progress:60},
       { name: 'Event C', company: "Red Cross", intro: "Raise funds for earthquake", progress:76},
     ],
+    events2: []
   }),
   methods: {
     visitEventPage(event){
       this.selectEvent = event
       this.$router.push({name: 'Account', params: {eventName:this.selectEvent, loginStatus: this.loginStatus}})
+    },
+    async getEventList(){
+      let len = await this.state.contract.getEventListLength();
+      console.log("hi")
+      console.log(len)
+      // var ongoingCount = 0;
+      // var pastCount = 0;
+      // for(var i = 0; i < len; i++) {
+      //   let event = await contract.eventList(i);
+      //   if(event._creator === _creator) {
+      //     if(event._ongoing === true) {
+      //       ongoingCount += 1;
+      //     }
+      //     else {
+      //       pastCount += 1;
+      //     }
+      //   }
+      // }
     }
   }
 };
