@@ -6,7 +6,7 @@ contract Fundraiser is ERC20 {
 
 	uint public _initialBalance = 10000;
 
-	constructor() public {
+	constructor() public payable {
     _mint(msg.sender, _initialBalance);
   }
 
@@ -40,7 +40,7 @@ contract Fundraiser is ERC20 {
     _;
   }
 
-  function createOrganization(string memory _name, string memory _password) public checkValidCreatorName(_name) returns(bool) {
+  function createOrganization(string memory _name, string memory _password) public payable checkValidCreatorName(_name) {
     uint _nameCode = uint(keccak256(abi.encodePacked(_name))) % _modulus;
     uint _passwordCode = uint(keccak256(abi.encodePacked(_password))) % _modulus;
     uint _code = _nameCode * _modulus + _passwordCode;
@@ -49,14 +49,14 @@ contract Fundraiser is ERC20 {
   }
 
 	function createEvent(string memory _eventName, string memory _creator, string memory _intro,
-											uint256 _targetAmount, address _eventAddress) public returns(bool) {
+											uint256 _targetAmount, address _eventAddress) public payable {
     // create new event
     uint id = eventList.push(Event(_eventName, _creator, _intro, _targetAmount, 0, _eventAddress, true));
     addr2EventId[_eventAddress] = id;
     emit NewEvent(_eventName, _creator, _targetAmount,  _eventAddress, _intro);
   }
 
-  function donate(address _donor, address payable _event, uint _amount) public {
+  function donate(address _donor, address payable _event, uint _amount) public payable {
     // donate to event
     require(balanceOf(_donor) >= _amount, "Donor does not have enough ethers!");
     uint _id = addr2EventId[_event] - 1;

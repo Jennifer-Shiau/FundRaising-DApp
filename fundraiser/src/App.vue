@@ -47,13 +47,13 @@ export default {
           // console.log(this.state)
           var self = this.state.accounts[0]
           console.log(self)
-          // var res = await this.state.contract.methods.createEvent("_eventName", "_creator", "_intro", 20, "0xCaC63831dc569F66109ee5f53aF1E5CF16E01EDE").send({from:self})
-          // console.log(res)
-          // await this.state.contract.methods.createOrganization("name", "pswd").send({from:self})
-          var b1 = await this.state.contract.methods.getBalance(this.state.accounts[0]).call({from:self})
+          var _event = "0x48C6Ed71726E4800210bF748C8C2909acDd24b02"
+          await this.state.contract.methods.createEvent("_eventName", "_creator", "_intro", 20, _event).send({from: self})
+          var b1 = await this.state.contract.methods.getBalance(self).call({from: self})
           console.log(b1)
-          await this.state.contract.methods.donate(self, "0xdfC9aa8396Bb178CA60142E6532F4128dAd92781", 10).send({from:self})
-          // await this.state.contract.methods.donate(account, 0xdfC9aa8396Bb178CA60142E6532F4128dAd92781, 100).send()
+          await this.state.contract.methods.donate(self, _event, 10).send({from: self})
+          var b2 = await this.state.contract.methods.getBalance(self).call({from: self})
+          console.log(b2)
           console.log("Success!")
         } catch (error) {
           alert('Fail!')
