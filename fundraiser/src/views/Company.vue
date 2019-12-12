@@ -20,15 +20,15 @@
           cols="6"
         >
           <h2>Ongoing Events</h2><br>
-          <v-list class="elevation-1">
+          <v-list class="elevation-1" v-if="mounted">
             <v-list-item-group>
               <v-list-item
                 v-for="(event, i) in ongoingEvents"
                 :key="i"
-                @click="visitEventPage(event)"
+                @click="visitEventPage(event['_eventAddress'])"
               >
                 <v-list-item-content>
-                    {{ event }}
+                    {{ event['_eventName'] }}
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -39,15 +39,15 @@
           cols="6"
         >
           <h2>Past Events</h2><br>
-          <v-list class="elevation-1">
+          <v-list class="elevation-1" v-if="mounted">
             <v-list-item-group>
               <v-list-item
                 v-for="(event, i) in pastEvents"
                 :key="i"
-                @click="visitEventPage(event)"
+                @click="visitEventPage(event['_eventAddress'])"
               >
                 <v-list-item-content>
-                    {{ event }}
+                    {{ event['_eventName'] }}
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -69,25 +69,39 @@ export default {
     state: Object
   },
   data: () => ({
-    ongoingEvents: [
-      'Event A',
-      'Event B',
-      'Event C'
-    ],
-    pastEvents: [
-      'Event D',
-      'Event E',
-      'Event F'
-    ]
+    ongoingEvents: [],
+    pastEvents: [],
+    mounted: false
   }),
   methods: {
     createEvent(){
-      this.$router.push({name: 'Create', params: {loginStatus: this.loginStatus, creator: this.userName}})
+      this.$router.push({name: 'Create', params: {loginStatus: this.loginStatus, creator: this.userName, 
+        state:this.state}})
     },
-    visitEventPage(event){
-      this.selectEvent = event
-      this.$router.push({name: 'Account', params: {eventName:this.selectEvent, loginStatus: this.loginStatus}})
+    visitEventPage(eventAddress){
+      this.selectEvent = eventAddress
+      this.$router.push({name: 'Account', params: {eventAddress:this.selectEvent, loginStatus: this.loginStatus,
+      state: this.state}})
+    },
+    async getEventList(){
+      let self = this.state.accounts[0]
+      let len = await this.state.contract.methods.getEventListLength().call({from:self});
+      for (let i = 0; i < len; i++) {
+        let e = await this.state.contract.methods.eventList(i).call({from:self});
+        if (e['_creator'] === this.userName) {
+          if (e['_ongoing'] === true) {
+            this.ongoingEvents.push(e);
+          }
+          else {
+            this.pastEvents.push(e);
+          }
+        }
+      }
+      this.mounted = true;
     }
+  },
+  mounted(){
+    this.getEventList()
   }
 }
 </script>
