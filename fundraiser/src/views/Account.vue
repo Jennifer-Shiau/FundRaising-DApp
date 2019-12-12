@@ -1,7 +1,7 @@
 <template>
   <div class="account">
     <v-container fluid>
-      <h2 class="font-weight-light display-1">{{ eventName }}</h2>
+      <h2 class="font-weight-light display-1">{{ event['_eventName'] }}</h2>
       <v-row>
         <v-col
           cols="12"
@@ -58,8 +58,17 @@ export default {
   name: 'Account',
   props: {
     loginStatus: Boolean,
-    eventName: String,//Event name or donor name
+    eventAddress: String,//Event address
     state: Object
   },
+  data: () => ({
+    event: {},
+  }),
+  async mounted(){
+    let self = this.state.accounts[0]
+    let eventId = await this.state.contract.methods.addr2EventId(this.eventAddress).call({from: self}) - 1;
+    this.event = await this.state.contract.methods.eventList(eventId).call({from: self});
+    console.log(this.event["_eventName"])
+  }
 }
 </script>

@@ -106,7 +106,7 @@ export default {
   methods: {
     toEventPage(){
       if (this.$refs.form.validate()) {
-        this.$router.push({name: 'Account', params: {eventName :this.eventName, loginStatus: this.loginStatus,
+        this.$router.push({name: 'Account', params: {eventAddress :this.eventAddress, loginStatus: this.loginStatus,
         state: this.state}})
       }
     },
@@ -119,7 +119,11 @@ export default {
         console.log(self)
         await this.state.contract.methods.createEvent(this.eventName, this.creator, "...", this.targetAmount, 
               this.eventAddress, this.selectCategory).send({from: self})
-        console.log("Success!")
+        // this.state.contract.events.NewEvent()
+        // .on("data", async function(event){
+        //   let e = await event.returnValues;
+        //   alert(e['_name'] + " is created!")
+        // }).on("error", console.error)
       } catch (error) {
         alert('Fail!')
         console.log(error)

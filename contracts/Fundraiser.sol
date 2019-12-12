@@ -24,13 +24,14 @@ contract Fundraiser is ERC20 {
   	uint256 _receivedAmount;
     address _eventAddress;
     bool _ongoing;
+    string _eventType;
     mapping(address=>uint256) _transactions;
   }
 
   Event[] public eventList;
 
   // events
-	event NewEvent(string _name, string _creator, uint256 _target, address _event, string _intro);
+	event NewEvent(string _name, string _creator, uint256 _target, address _event, string _intro, string _type);
   event Donate(address _donor, address _event, uint _amount);
   event DonationStored(uint _eventId, uint _amount); 	//cannot emit struct in event
 	event NewOrganization(string _name, string _password);
@@ -49,11 +50,11 @@ contract Fundraiser is ERC20 {
   }
 
 	function createEvent(string memory _eventName, string memory _creator, string memory _intro,
-											uint256 _targetAmount, address _eventAddress) public payable {
+											uint256 _targetAmount, address _eventAddress, string memory _eventType) public payable {
     // create new event
-    uint id = eventList.push(Event(_eventName, _creator, _intro, _targetAmount, 0, _eventAddress, true));
+    uint id = eventList.push(Event(_eventName, _creator, _intro, _targetAmount, 0, _eventAddress, true, _eventType));
     addr2EventId[_eventAddress] = id;
-    emit NewEvent(_eventName, _creator, _targetAmount,  _eventAddress, _intro);
+    emit NewEvent(_eventName, _creator, _targetAmount,  _eventAddress, _intro, _eventType);
   }
 
   function donate(address _donor, address payable _event, uint _amount) public payable {
