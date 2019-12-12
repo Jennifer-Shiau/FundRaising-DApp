@@ -35,27 +35,27 @@
                 <v-subheader>Ongoing</v-subheader>
                 <v-list-item-group v-model="selectEvent" color="primary">
                   <v-list-item
-                    v-for="(event, i) in events"
+                    v-for="(event, i) in events[categories[selectCategory].name]"
                     :key="i"
-                    @click="visitEventPage(event.name)"
+                    @click="visitEventPage(event['_eventAddress'])"
                   >
                     <v-list-item-content>
                       <v-card class="text-left justify-center align-center elevation-1">
                         <v-row>
                           <v-col>
-                          <v-card-title>{{event.name}}</v-card-title>
-                          <v-card-subtitle>{{event.company}}</v-card-subtitle>
+                          <v-card-title>{{event['_eventName']}}</v-card-title>
+                          <v-card-subtitle>{{event['_creator']}}</v-card-subtitle>
                           <v-card-text>
-                            {{event.intro}}
+                            {{event['_intro']}}
                           </v-card-text>
                           </v-col>
                           <v-col>
                             <v-container class="text-right">
-                              <v-card-text>{{event.progress}}%</v-card-text>
+                              <v-card-text>{{ event['_receivedAmount']*1.0/event['_targetAmount'] * 100 }}%</v-card-text>
                               <v-progress-linear
                                 disabled
                                 :background-opacity=0.3
-                                :value="event.progress"
+                                :value="event['_receivedAmount']*1.0/event['_targetAmount'] * 100"
                                 rounded
                                 color="indigo darken-2"
                                 height="8"
@@ -88,7 +88,7 @@ export default {
     state: Object
   },
   data: () => ({
-    selectCategory: null,
+    selectCategory: 0,
     categories: [
       { name: 'Natural Disasters', intro: "Fundraising for disasters such as earthquakes...etc.", icon: ""},
       { name: 'Causes', intro: "Fundraising for dedicated causes.", icon: ""},
@@ -96,36 +96,32 @@ export default {
       { name: 'Investments', intro: "Investments in startups or others.", icon: ""},
     ],
     selectEvent: 1,
-    events: [
-      { name: 'Event A', company: "Red Cross", intro: "Raise funds for earthquake", progress:40},
-      { name: 'Event B', company: "Red Cross", intro: "Raise funds for earthquake", progress:60},
-      { name: 'Event C', company: "Red Cross", intro: "Raise funds for earthquake", progress:76},
-    ],
-    events2: []
+    events: {
+      'Natural Disasters': [],
+      'Causes': [],
+      'Donations': [],
+      'Investments': []
+    }
   }),
   methods: {
-    visitEventPage(event){
-      this.selectEvent = event
-      this.$router.push({name: 'Account', params: {eventName:this.selectEvent, loginStatus: this.loginStatus}})
+    visitEventPage(eventAddress){
+      this.selectEvent = eventAddress
+      this.$router.push({name: 'Account', params: {eventAddress:this.selectEvent, loginStatus: this.loginStatus,
+      state: this.state}})
     },
     async getEventList(){
-      let len = await this.state.contract.getEventListLength();
-      console.log("hi")
-      console.log(len)
-      // var ongoingCount = 0;
-      // var pastCount = 0;
-      // for(var i = 0; i < len; i++) {
-      //   let event = await contract.eventList(i);
-      //   if(event._creator === _creator) {
-      //     if(event._ongoing === true) {
-      //       ongoingCount += 1;
-      //     }
-      //     else {
-      //       pastCount += 1;
-      //     }
-      //   }
-      // }
+      let self = this.state.accounts[0]
+      let len = await this.state.contract.methods.getEventListLength().call({from:self});
+      for (let i = 0; i < len; i++) {
+        let e = await this.state.contract.methods.eventList(i).call({from:self});
+        if (e['_ongoing'] === true && e['_eventType'] in this.events) {
+          this.events[e['_eventType']].push(e);
+        }
+      }
     }
+  },
+  async mounted(){
+    this.getEventList()
   }
 };
 </script>

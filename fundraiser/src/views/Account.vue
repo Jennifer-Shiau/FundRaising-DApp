@@ -68,7 +68,6 @@ export default {
     let self = this.state.accounts[0]
     let eventId = await this.state.contract.methods.addr2EventId(this.eventAddress).call({from: self}) - 1;
     this.event = await this.state.contract.methods.eventList(eventId).call({from: self});
-    console.log(this.event["_eventName"])
   }
 }
 </script>
