@@ -91,7 +91,7 @@
           cols="6"
           md="4"
         >
-          <v-row justify="center">
+          <v-row justify="center" v-if="event['_ongoing']">
             <v-dialog v-model="dialog" persistent max-width="600px">
               <template v-slot:activator="{ on }">
                 <v-btn color="primary" dark v-on="on">Donate</v-btn>
@@ -142,6 +142,7 @@ export default {
   data: () => ({
     self: null,
     event: {},
+    eventId: null,
     balance: null,
     // for donate
     dialog: false,
@@ -154,12 +155,14 @@ export default {
     async donate() {
       this.dialog = false
       await this.state.contract.methods.donate(this.self, this.event['_eventAddress'], this.amount).send({from: this.self})
+      this.event = await this.state.contract.methods.eventList(this.eventId).call({from: this.self});
+      this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
     }
   },
   async mounted() {
     this.self = this.state.accounts[0]
-    let eventId = await this.state.contract.methods.addr2EventId(this.eventAddress).call({from: this.self}) - 1;
-    this.event = await this.state.contract.methods.eventList(eventId).call({from: this.self});
+    this.eventId = await this.state.contract.methods.addr2EventId(this.eventAddress).call({from: this.self}) - 1;
+    this.event = await this.state.contract.methods.eventList(this.eventId).call({from: this.self});
     this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
   }
 }
