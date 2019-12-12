@@ -36,17 +36,41 @@ contract Fundraiser is ERC20 {
   event DonationStored(uint _eventId, uint _amount); 	//cannot emit struct in event
 	event NewOrganization(string _name, string _password);
 
-  modifier checkValidCreatorName(string memory _name) {
-    require(creatorName2Hash[_name] == 0, "Creator name is invalid.");
-    _;
-  }
+  // modifier checkValidCreatorName(string memory _name) {
+  //   require(creatorName2Hash[_name] == 0, "Creator name is invalid.");
+  //   _;
+  // }
 
-  function createOrganization(string memory _name, string memory _password) public payable checkValidCreatorName(_name) {
+  function createOrganization(string memory _name, string memory _password) public payable {
+    // create new organization
     uint _nameCode = uint(keccak256(abi.encodePacked(_name))) % _modulus;
     uint _passwordCode = uint(keccak256(abi.encodePacked(_password))) % _modulus;
     uint _code = _nameCode * _modulus + _passwordCode;
     creatorName2Hash[_name] = _code;
 		emit NewOrganization(_name, _password);
+  }
+
+  function checkValidName(string memory _name) public view returns (bool) {
+    // for sign up
+    if (creatorName2Hash[_name] == 0) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  function verifyPassword(string memory _name, string memory _password) public view returns (bool) {
+    // for login
+    uint _nameCode = uint(keccak256(abi.encodePacked(_name))) % _modulus;
+    uint _passwordCode = uint(keccak256(abi.encodePacked(_password))) % _modulus;
+    uint _code = _nameCode * _modulus + _passwordCode;
+    if (_code == creatorName2Hash[_name]) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
 	function createEvent(string memory _eventName, string memory _creator, string memory _intro,

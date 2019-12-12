@@ -30,7 +30,7 @@
 
                         <v-btn
                           class="mr-4"
-                          @click="login"
+                          @click="signup"
                         >
                           Sign Up
                         </v-btn>
@@ -55,6 +55,9 @@
 
 export default {
     name: 'Signup',
+    props: {
+      state: Object
+    },
     data: () => ({
       valid: true,
       username: '',
@@ -65,16 +68,24 @@ export default {
       password: '',
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || "Password must be longer than 12 characters",
+        v => (v && v.length >= 6) || "Password must be longer than 6 characters",
       ],
       lazy: false,
     }),
 
     methods: {
-      login () {
+      async signup () {
         if (this.$refs.form.validate()) {
-          this.$router.push({ path: '/home' })
-          this.$emit('signup', [true, this.username])
+          let result = await this.state.contract.methods.checkValidName(this.username).call({from: this.state.accounts[0]})
+          if (result === true) {
+            await this.state.contract.methods.createOrganization(this.username, this.password).send({from: this.state.accounts[0]})
+            this.$router.push({ path: '/home' })
+            this.$emit('signup', [true, this.username])
+          }
+          else {
+            alert('Username already exists!')
+            this.reset()
+          }
         }
       },
       reset () {

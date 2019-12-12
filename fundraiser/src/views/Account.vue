@@ -91,8 +91,6 @@
           cols="6"
           md="4"
         >
-          <!-- <v-btn>Donate</v-btn> -->
-        
           <v-row justify="center">
             <v-dialog v-model="dialog" persistent max-width="600px">
               <template v-slot:activator="{ on }">
@@ -160,11 +158,7 @@ export default {
   },
   async mounted() {
     this.self = this.state.accounts[0]
-
     let eventId = await this.state.contract.methods.addr2EventId(this.eventAddress).call({from: this.self}) - 1;
-    // let address = '0x48C6Ed71726E4800210bF748C8C2909acDd24b02'
-    // let eventId = await this.state.contract.methods.addr2EventId(address).call({from: this.self}) - 1;
-    
     this.event = await this.state.contract.methods.eventList(eventId).call({from: this.self});
     this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
   }

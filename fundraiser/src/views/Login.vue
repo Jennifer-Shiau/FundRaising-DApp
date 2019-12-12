@@ -68,17 +68,23 @@ export default {
       password: '',
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || "Password must be longer than 12 characters",
+        v => (v && v.length >= 6) || "Password must be longer than 6 characters",
       ],
       lazy: false,
     }),
 
     methods: {
-      login () {
+      async login () {
         if (this.$refs.form.validate()) {
-          // console.log("Logged in!")
-          this.$router.push({ path: '/home'})
-          this.$emit('login', [true, this.username])
+          let result = await this.state.contract.methods.verifyPassword(this.username, this.password).call({from: this.state.accounts[0]})
+          if (result === true) {
+            this.$router.push({ path: '/home'})
+            this.$emit('login', [true, this.username])
+          }
+          else {
+            alert('Wrong username or password!')
+            this.reset()
+          }
         }
       },
       reset () {
