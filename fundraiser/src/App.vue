@@ -48,7 +48,7 @@ export default {
           var self = this.state.accounts[0]
           console.log(self)
           var _event = "0x48C6Ed71726E4800210bF748C8C2909acDd24b02"
-          await this.state.contract.methods.createEvent("_eventName", "_creator", "_intro", 20, _event, "Natural Disaster").send({from: self})
+          await this.state.contract.methods.createEvent("_eventName", "_creator", "_intro", 100, _event, "Natural Disaster").send({from: self})
           var b1 = await this.state.contract.methods.getBalance(self).call({from: self})
           console.log(b1)
           await this.state.contract.methods.donate(self, _event, 10).send({from: self})
