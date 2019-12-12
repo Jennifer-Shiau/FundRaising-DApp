@@ -153,14 +153,24 @@ export default {
   }),
   methods: {
     async donate() {
-      this.dialog = false
-      await this.state.contract.methods.donate(this.self, this.event['_eventAddress'], this.amount).send({from: this.self})
-      this.event = await this.state.contract.methods.eventList(this.eventId).call({from: this.self});
-      this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
+      let donorBalance = await this.state.contract.methods.getBalance(this.self).call({from: this.self});
+      if ((donorBalance - this.amount) < 0) {
+        alert('Donor does not have enough tokens!');
+      }
+      else if (this.event['_ongoing'] === false) {
+        alert('The event has ended.');
+        this.dialog = false;
+      }
+      else {
+        this.dialog = false;
+        await this.state.contract.methods.donate(this.self, this.event['_eventAddress'], this.amount).send({from: this.self});
+        this.event = await this.state.contract.methods.eventList(this.eventId).call({from: this.self});
+        this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
+      }
     }
   },
   async mounted() {
-    this.self = this.state.accounts[0]
+    this.self = this.state.accounts[0];
     this.eventId = await this.state.contract.methods.addr2EventId(this.eventAddress).call({from: this.self}) - 1;
     this.event = await this.state.contract.methods.eventList(this.eventId).call({from: this.self});
     this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
