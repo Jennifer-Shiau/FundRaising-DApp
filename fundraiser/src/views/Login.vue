@@ -55,6 +55,9 @@
 
 export default {
     name: 'Login',
+    props: {
+      state: Object
+    },
     data: () => ({
       valid: true,
       username: '',

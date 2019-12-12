@@ -30,6 +30,13 @@
                             required
                         ></v-text-field>
 
+                        <v-text-field
+                            v-model="eventAddress"
+                            :rules="eventAddressRules"
+                            label="Event address"
+                            required
+                        ></v-text-field>
+
                         <v-select
                           v-model="selectCategory"
                           :items="categories"
@@ -40,7 +47,7 @@
 
                         <v-btn
                           class="mr-4"
-                          @click="toEventPage"
+                          @click="createEvent"
                         >
                           Create
                         </v-btn>
@@ -68,7 +75,8 @@ export default {
   name: 'Create',
   props: {
     loginStatus: Boolean,
-    creator: String //not used
+    creator: String, //not used
+    state: Object
   },
   data: () => ({
     selectCategory : null,
@@ -78,9 +86,14 @@ export default {
       v => !!v || 'Event name is required',
       v => (v && v.length <= 50) || 'Event name must be less than 50 characters',
     ],
-    targetAmount: "",
-    targetAmountRules: [
+    targetAmount: null,
+    targetAmountRules: [ //rule: is digit
       v => !!v || 'Target amount is required',
+    ],
+    eventAddress: "0x48C6Ed71726E4800210bF748C8C2909acDd24b02",
+    eventAddressRules:[
+      v => !!v || 'Event address is required',
+      v => (v && v.length == 42) || 'Event address must be 42 characters',
     ],
     categories: [
       'Natural Disasters',
@@ -93,11 +106,25 @@ export default {
   methods: {
     toEventPage(){
       if (this.$refs.form.validate()) {
-        this.$router.push({name: 'Account', params: {eventName :this.eventName, loginStatus: this.loginStatus}})
+        this.$router.push({name: 'Account', params: {eventName :this.eventName, loginStatus: this.loginStatus,
+        state: this.state}})
       }
     },
     reset () {
       this.$refs.form.reset()
+    },
+    async createEvent(){//for debugging
+      try {
+        var self = this.state.accounts[0]
+        console.log(self)
+        await this.state.contract.methods.createEvent(this.eventName, this.creator, "...", this.targetAmount, 
+              this.eventAddress, this.selectCategory).send({from: self})
+        console.log("Success!")
+      } catch (error) {
+        alert('Fail!')
+        console.log(error)
+      }
+      this.toEventPage()
     }
   }
 }

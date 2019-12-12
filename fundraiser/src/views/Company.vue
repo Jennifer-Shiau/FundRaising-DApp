@@ -65,7 +65,8 @@ export default {
   name: 'Company',
   props: {
     userName: String,
-    loginStatus: Boolean
+    loginStatus: Boolean,
+    state: Object
   },
   data: () => ({
     ongoingEvents: [

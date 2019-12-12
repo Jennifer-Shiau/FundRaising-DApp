@@ -58,7 +58,8 @@ export default {
   name: 'Account',
   props: {
     loginStatus: Boolean,
-    eventName: String//Event name or donor name
+    eventName: String,//Event name or donor name
+    state: Object
   },
 }
 </script>
