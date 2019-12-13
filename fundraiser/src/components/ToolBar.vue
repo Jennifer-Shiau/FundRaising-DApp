@@ -105,7 +105,8 @@ export default {
   }),
   methods: {
     displayCompany(){
-      this.$router.push({name: 'Company', params: {loginStatus: this.loginStatus, userName: this.userName}})
+      this.$router.push({name: 'Company', params: {loginStatus: this.loginStatus, 
+        userName: this.userName, creator: this.userName}})
     },
     triggerDropDown(arg){
       if (arg == 0){

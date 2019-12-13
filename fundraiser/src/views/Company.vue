@@ -1,6 +1,6 @@
 <template>
   <div class="company">
-    <v-container fluid>
+    <v-container fluid v-if="validCreator">
       <v-row>
         <v-col
           cols="2"
@@ -65,30 +65,39 @@ export default {
   name: 'Company',
   props: {
     userName: String,
+    creator: String,
     loginStatus: Boolean,
     state: Object
   },
   data: () => ({
     ongoingEvents: [],
     pastEvents: [],
+    validCreator: false,
     mounted: false
   }),
   methods: {
     createEvent(){
       this.$router.push({name: 'Create', params: {loginStatus: this.loginStatus, creator: this.userName, 
-        state:this.state}})
+        state: this.state}})
     },
     visitEventPage(eventAddress){
       this.selectEvent = eventAddress
-      this.$router.push({name: 'Account', params: {eventAddress:this.selectEvent, loginStatus: this.loginStatus,
-      state: this.state}})
+      this.$router.push({name: 'Account', params: {eventAddress: this.selectEvent, loginStatus: this.loginStatus,
+        userName: this.userName, state: this.state}})
+    },
+    checkCreator(){
+      if (this.userName === this.creator){
+        this.validCreator = true;
+      }
     },
     async getEventList(){
+      console.log(this.userName)
+      console.log(this.creator)
       let self = this.state.accounts[0]
       let len = await this.state.contract.methods.getEventListLength().call({from:self});
       for (let i = 0; i < len; i++) {
         let e = await this.state.contract.methods.eventList(i).call({from:self});
-        if (e['_creator'] === this.userName) {
+        if (e['_creator'] === this.creator) {
           if (e['_ongoing'] === true) {
             this.ongoingEvents.push(e);
           }
@@ -101,6 +110,7 @@ export default {
     }
   },
   mounted(){
+    this.checkCreator()
     this.getEventList()
   }
 }

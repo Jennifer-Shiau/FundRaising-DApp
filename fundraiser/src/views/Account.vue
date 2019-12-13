@@ -16,8 +16,8 @@
                 </tr>
               </thead>
               <tbody class="text-left">
-                <tr>
-                  <td>Creater</td>
+                <tr @click="toCompany">
+                  <td>Creator</td>
                   <td>{{ event['_creator'] }}</td>
                 </tr>
                 <tr>
@@ -137,6 +137,8 @@ export default {
   props: {
     loginStatus: Boolean,
     eventAddress: String,//Event address
+    userName: String,
+    // Creator: String,
     state: Object
   },
   data: () => ({
@@ -167,6 +169,10 @@ export default {
         this.event = await this.state.contract.methods.eventList(this.eventId).call({from: this.self});
         this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
       }
+    },
+    toCompany() {
+      this.$router.push({name: 'Company', params: {loginStatus: this.loginStatus, 
+        userName: this.userName, creator: this.event['_creator'], state: this.state}});
     }
   },
   async mounted() {
