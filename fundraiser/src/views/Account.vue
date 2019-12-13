@@ -21,7 +21,13 @@
                   <td>
                     <v-dialog v-model="dialog" v-if="validCreator" persistent max-width="600px">
                       <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark v-on="on">Edit</v-btn>
+                        <v-icon
+                          small
+                          class="mr-2"
+                          v-on="on"
+                        >
+                          mdi-border-color
+                        </v-icon>
                       </template>
                       <v-card>
                         <v-card-title>
