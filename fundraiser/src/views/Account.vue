@@ -9,44 +9,77 @@
         >
           <v-simple-table>
             <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left">Name</th>
-                  <th class="text-left">Value</th>
-                </tr>
-              </thead>
               <tbody class="text-left">
                 <tr @click="toCompany">
                   <td>Creator</td>
                   <td>{{ event['_creator'] }}</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td>Intro</td>
                   <td>{{ event['_intro'] }}</td>
+                  <td>
+                    <v-dialog v-model="dialog" v-if="validCreator" persistent max-width="600px">
+                      <template v-slot:activator="{ on }">
+                        <v-btn color="primary" dark v-on="on">Edit</v-btn>
+                      </template>
+                      <v-card>
+                        <v-card-title>
+                          <span class="headline">Edit Intro</span>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12">
+                                <v-text-field
+                                  v-model="intro"
+                                  :counter="50"
+                                  :rules="introRules"
+                                  label="Intro"
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
+                          <v-btn color="blue darken-1" text @click="edit">Save</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                  </td>
                 </tr>
                 <tr>
                   <td>Target amount</td>
                   <td>{{ event['_targetAmount'] }}</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td>Received amount</td>
                   <td>{{ event['_receivedAmount'] }}</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td>Balance</td>
                   <td>{{ balance }}</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td>Address</td>
                   <td>{{ event['_eventAddress'] }}</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td>Ongoing</td>
                   <td>{{ event['_ongoing'] }}</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td>Category</td>
                   <td>{{ event['_eventType'] }}</td>
+                  <td></td>
                 </tr>
               </tbody>
             </template>
@@ -146,6 +179,13 @@ export default {
     event: {},
     eventId: null,
     balance: null,
+    validCreator: false,
+    // for intro
+    intro: "",
+    introRules: [
+      v => !!v || 'Intro is required',
+      v => (v && v.length <= 50) || 'Intro must be less than 50 characters',
+    ],
     // for donate
     dialog: false,
     amount: "",
@@ -173,6 +213,20 @@ export default {
     toCompany() {
       this.$router.push({name: 'Company', params: {loginStatus: this.loginStatus, 
         userName: this.userName, creator: this.event['_creator'], state: this.state}});
+    },
+    checkCreator(){
+      if (this.userName === this.event['_creator']){
+        this.validCreator = true;
+      }
+    },
+    async edit() {
+      this.dialog = false;
+      await this.state.contract.methods.editIntro(this.eventId, this.intro).send({from: this.self});
+      this.event = await this.state.contract.methods.eventList(this.eventId).call({from: this.self});
+    },
+    cancel() {
+      this.dialog = false;
+      this.intro = this.event['_intro'];
     }
   },
   async mounted() {
@@ -180,6 +234,8 @@ export default {
     this.eventId = await this.state.contract.methods.addr2EventId(this.eventAddress).call({from: this.self}) - 1;
     this.event = await this.state.contract.methods.eventList(this.eventId).call({from: this.self});
     this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
+    this.checkCreator();
+    this.intro = this.event['_intro'];
   }
 }
 </script>

@@ -94,6 +94,10 @@ contract Fundraiser is ERC20 {
     emit Donate(_donor, _event, _amount);
   }
 
+  function editIntro(uint _id, string memory _intro) public payable {
+    eventList[_id]._intro = _intro;
+  }
+
   function storeDonation(address _donor, address payable _event, uint _amount) private {
     // store donation into event
     uint _id = addr2EventId[_event] - 1;
