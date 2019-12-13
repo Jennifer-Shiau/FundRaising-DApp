@@ -25,7 +25,9 @@ contract Fundraiser is ERC20 {
     address _eventAddress;
     bool _ongoing;
     string _eventType;
-    mapping(address=>uint256) _transactions;
+    address[] _txAddress;
+    uint256[] _txAmount;
+    // mapping(address=>uint256) _transactions;
   }
 
   Event[] public eventList;
@@ -74,9 +76,12 @@ contract Fundraiser is ERC20 {
   }
 
 	function createEvent(string memory _eventName, string memory _creator, string memory _intro,
-											uint256 _targetAmount, address _eventAddress, string memory _eventType) public payable {
+		uint256 _targetAmount, address _eventAddress, string memory _eventType) public payable {
     // create new event
-    uint id = eventList.push(Event(_eventName, _creator, _intro, _targetAmount, 0, _eventAddress, true, _eventType));
+    address[] memory _txAddress;
+    uint256[] memory _txAmount;
+    uint id = eventList.push(Event(_eventName, _creator, _intro, _targetAmount, 0, _eventAddress, true,
+      _eventType, _txAddress, _txAmount));
     addr2EventId[_eventAddress] = id;
     emit NewEvent(_eventName, _creator, _targetAmount,  _eventAddress, _intro, _eventType);
   }
@@ -101,7 +106,8 @@ contract Fundraiser is ERC20 {
   function storeDonation(address _donor, address payable _event, uint _amount) private {
     // store donation into event
     uint _id = addr2EventId[_event] - 1;
-		eventList[_id]._transactions[_donor] = _amount;
+		eventList[_id]._txAddress.push(_donor);
+    eventList[_id]._txAmount.push(_amount);
     eventList[_id]._receivedAmount += _amount;
     emit DonationStored(_id, _amount);
   }
@@ -127,5 +133,15 @@ contract Fundraiser is ERC20 {
 	function getEventListLength() public view returns (uint) {
 		// get length of eventList
 		return eventList.length;
+	}
+
+  function getTxCount(uint eIdx) public view returns (uint) {
+		// get length of transaction lists of event eIdx
+		return eventList[eIdx]._txAddress.length;
+	}
+
+  function getEventTXbyIdx(uint eIdx, uint txIdx) public view returns (address, uint) {
+		// get txIdx transaction of eIdx event
+		return (eventList[eIdx]._txAddress[txIdx], eventList[eIdx]._txAmount[txIdx]);
 	}
 }

@@ -90,7 +90,6 @@
               </tbody>
             </template>
           </v-simple-table>
-          
           <!--
           <v-expansion-panels focusable>
             <v-expansion-panel>
@@ -164,6 +163,30 @@
 
         </v-col>
       </v-row>
+      <v-row>
+        <v-card>
+            <v-card-title>Transactions</v-card-title>
+            <v-simple-table>
+              <template v-slot:default>
+                <tbody class="text-left">
+                  <tr>
+                    <td>Donor Address</td>
+                    <td>Donation Amount</td>
+                    <td></td>
+                  </tr>
+                  <tr 
+                  v-for="(tx, i) in txList"
+                      :key="i"
+                  >
+                    <td>{{ tx.address }}</td>
+                    <td>{{ tx.amount }}</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-card>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -185,6 +208,8 @@ export default {
     event: {},
     eventId: null,
     balance: null,
+    txCount: 0,
+    txList: [], //list of {'address': addr, 'amount': $} to preserve insert order
     validCreator: false,
     // for intro
     intro: "",
@@ -214,6 +239,7 @@ export default {
         await this.state.contract.methods.donate(this.self, this.event['_eventAddress'], this.amount).send({from: this.self});
         this.event = await this.state.contract.methods.eventList(this.eventId).call({from: this.self});
         this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
+        this.updateTx()
       }
     },
     toCompany() {
@@ -233,6 +259,32 @@ export default {
     cancel() {
       this.dialog = false;
       this.intro = this.event['_intro'];
+    },
+    async getTx() {
+      console.log("getTx")
+      this.txCount = await this.state.contract.methods.getTxCount(this.eventId).call({from:this.self});
+      console.log(this.txCount)
+      for (let i = 0; i < this.txCount; i++){
+        let result = await this.state.contract.methods.getEventTXbyIdx(this.eventId, i).call({from:this.self});
+        let {0: addr, 1: amount} = result;
+        console.log(addr)
+        console.log(amount)
+        this.txList.push({'address': addr, 'amount': amount});
+      }
+    },
+    async updateTx() {
+      //after donate
+      console.log("updateTx")
+      let newCount =  await this.state.contract.methods.getTxCount(this.eventId).call({from:this.self});
+      console.log(newCount)
+      for (let i = this.txCount; i < newCount; i++){
+        let result = await this.state.contract.methods.getEventTXbyIdx(this.eventId, i).call({from:this.self});
+        let {0: addr, 1: amount} = result;
+        console.log(addr)
+        console.log(amount)
+        this.txList.push({'address': addr, 'amount': amount});
+      }
+      this.txCount = newCount;
     }
   },
   async mounted() {
@@ -242,6 +294,7 @@ export default {
     this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
     this.checkCreator();
     this.intro = this.event['_intro'];
+    this.getTx()
   }
 }
 </script>
