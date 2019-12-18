@@ -85,7 +85,12 @@ export default {
   name: 'LandingPage',
   props:{
     loginStatus: Boolean,
-    state: Object
+    state: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    }
   },
   data: () => ({
     selectCategory: 0,

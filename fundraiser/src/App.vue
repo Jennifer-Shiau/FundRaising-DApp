@@ -8,7 +8,14 @@
       >
       </ToolBar>
       <v-container fluid>
-        <router-view @login="changeToolBar" @signup="changeToolBar" 
+        <v-skeleton-loader
+          v-if="!stateReady"
+          class="mx-auto"
+          max-width="600"
+          max-height="500"
+          type="card"
+        ></v-skeleton-loader>
+        <router-view @login="changeToolBar" @signup="changeToolBar" v-if="stateReady"
           v-bind:user-name="userName"
           v-bind:state="state"
           v-bind:login-status="loginStatus"
@@ -34,6 +41,7 @@ export default {
         accounts: [],
         contract: {}
       },
+      stateReady: false
     }),
     methods: {
       changeToolBar(arg){
@@ -41,7 +49,7 @@ export default {
         this.userName = arg[1]
       },
     },
-    async mounted(){
+    async beforeCreate(){
       try {
         this.state.web3 = await getWeb3();
         this.state.accounts = await this.state.web3.eth.getAccounts();
@@ -57,6 +65,7 @@ export default {
         );
         console.error(error);
       }
+      this.stateReady = true
     }
 };
 
