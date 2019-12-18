@@ -116,14 +116,8 @@ export default {
     async createEvent(){//for debugging
       try {
         var self = this.state.accounts[0]
-        console.log(self)
         await this.state.contract.methods.createEvent(this.eventName, this.creator, "...", this.targetAmount, 
               this.eventAddress, this.selectCategory).send({from: self})
-        // this.state.contract.events.NewEvent()
-        // .on("data", async function(event){
-        //   let e = await event.returnValues;
-        //   alert(e['_name'] + " is created!")
-        // }).on("error", console.error)
       } catch (error) {
         alert('Fail!')
         console.log(error)

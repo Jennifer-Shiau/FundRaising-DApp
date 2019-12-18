@@ -229,7 +229,6 @@ export default {
     },
     async getTx() {
       this.txCount = await this.state.contract.methods.getTxCount(this.eventId).call({from:this.self});
-      console.log(this.txCount)
       for (let i = 0; i < this.txCount; i++){
         let result = await this.state.contract.methods.getEventTXbyIdx(this.eventId, i).call({from:this.self});
         let {0: addr, 1: amount} = result;
@@ -238,7 +237,6 @@ export default {
     },
     async updateTx() {
       //after donate
-      console.log("updateTx")
       let newCount =  await this.state.contract.methods.getTxCount(this.eventId).call({from:this.self});
       for (let i = this.txCount; i < newCount; i++){
         let result = await this.state.contract.methods.getEventTXbyIdx(this.eventId, i).call({from:this.self});

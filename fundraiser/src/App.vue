@@ -8,8 +8,6 @@
       >
       </ToolBar>
       <v-container fluid>
-        <v-btn @click="callContract"
-        >Call contract</v-btn>
         <router-view @login="changeToolBar" @signup="changeToolBar" 
           v-bind:user-name="userName"
           v-bind:state="state"
@@ -42,24 +40,6 @@ export default {
         this.loginStatus = arg[0]
         this.userName = arg[1]
       },
-      async callContract(){//for debugging
-        try {
-          // console.log(this.state)
-          var self = this.state.accounts[0]
-          console.log(self)
-          var _event = "0x48C6Ed71726E4800210bF748C8C2909acDd24b02"
-          await this.state.contract.methods.createEvent("_eventName", "_creator", "_intro", 100, _event, "Natural Disaster").send({from: self})
-          var b1 = await this.state.contract.methods.getBalance(self).call({from: self})
-          console.log(b1)
-          await this.state.contract.methods.donate(self, _event, 10).send({from: self})
-          var b2 = await this.state.contract.methods.getBalance(self).call({from: self})
-          console.log(b2)
-          console.log("Success!")
-        } catch (error) {
-          alert('Fail!')
-          console.log(error)
-        }
-      }
     },
     async mounted(){
       try {
@@ -67,7 +47,6 @@ export default {
         this.state.accounts = await this.state.web3.eth.getAccounts();
         const networkId = await this.state.web3.eth.net.getId();
         const deployedNetwork = await Fundraiser.networks[networkId];
-        console.log(deployedNetwork.address)
         this.state.contract = new this.state.web3.eth.Contract(
           Fundraiser.abi,
           deployedNetwork && deployedNetwork.address,
