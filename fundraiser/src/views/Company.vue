@@ -113,12 +113,10 @@ export default {
       handler() {
         this.eventReady = false;
         this.getEventList()
+        this.checkCreator()
       },
       immediate: true,
     }
   },
-  mounted(){
-    this.checkCreator()
-  }
 }
 </script>
