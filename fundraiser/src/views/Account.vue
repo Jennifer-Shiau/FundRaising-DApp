@@ -90,39 +90,6 @@
               </tbody>
             </template>
           </v-simple-table>
-          <!--
-          <v-expansion-panels focusable>
-            <v-expansion-panel>
-              <v-expansion-panel-header>Balance</v-expansion-panel-header>
-              <v-expansion-panel-content>
-                1000 ETH
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-
-            <v-expansion-panel>
-              <v-expansion-panel-header>Transactions</v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-card>
-                  <v-tabs grow>
-                    <v-tab>Input</v-tab>
-                    <v-tab>Output</v-tab>
-                    
-                    <v-tab-item>
-                      <v-card flat>
-                        <v-card-text>Transaction inputs ...</v-card-text>
-                      </v-card>
-                    </v-tab-item>
-                    <v-tab-item>
-                      <v-card flat>
-                        <v-card-text>Transaction outputs ...</v-card-text>
-                      </v-card>
-                    </v-tab-item>
-                  </v-tabs>
-                </v-card>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-          -->
         </v-col>
         
         <v-col v-if="!loginStatus"
@@ -170,8 +137,8 @@
               <template v-slot:default>
                 <tbody class="text-left">
                   <tr>
-                    <td>Donor Address</td>
-                    <td>Donation Amount</td>
+                    <th>Donor Address</th>
+                    <th>Donation Amount</th>
                     <td></td>
                   </tr>
                   <tr 
@@ -261,14 +228,11 @@ export default {
       this.intro = this.event['_intro'];
     },
     async getTx() {
-      console.log("getTx")
       this.txCount = await this.state.contract.methods.getTxCount(this.eventId).call({from:this.self});
       console.log(this.txCount)
       for (let i = 0; i < this.txCount; i++){
         let result = await this.state.contract.methods.getEventTXbyIdx(this.eventId, i).call({from:this.self});
         let {0: addr, 1: amount} = result;
-        console.log(addr)
-        console.log(amount)
         this.txList.push({'address': addr, 'amount': amount});
       }
     },
@@ -276,12 +240,9 @@ export default {
       //after donate
       console.log("updateTx")
       let newCount =  await this.state.contract.methods.getTxCount(this.eventId).call({from:this.self});
-      console.log(newCount)
       for (let i = this.txCount; i < newCount; i++){
         let result = await this.state.contract.methods.getEventTXbyIdx(this.eventId, i).call({from:this.self});
         let {0: addr, 1: amount} = result;
-        console.log(addr)
-        console.log(amount)
         this.txList.push({'address': addr, 'amount': amount});
       }
       this.txCount = newCount;

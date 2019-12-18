@@ -105,8 +105,11 @@ export default {
   }),
   methods: {
     displayCompany(){
-      this.$router.push({name: 'Company', params: {loginStatus: this.loginStatus, 
-        userName: this.userName, creator: this.userName}})
+      const path = `/company/${this.userName}`
+      if (this.$route.path !== path){
+        this.$router.push({name: 'Company', params: {loginStatus: this.loginStatus, 
+          userName: this.userName, creator: this.userName}})
+      }
     },
     triggerDropDown(arg){
       if (arg == 0){

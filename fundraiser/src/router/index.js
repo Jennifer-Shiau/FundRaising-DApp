@@ -25,13 +25,13 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/account',
+    path: '/account/:eventAddress',
     name: 'Account',
     component: () => import(/* webpackChunkName: "account" */ '../views/Account.vue'),
     props: true
   },
   {
-    path: '/company',
+    path: '/company/:creator',
     name: 'Company',
     component: () => import(/* webpackChunkName: "company" */ '../views/Company.vue'),
     props: true

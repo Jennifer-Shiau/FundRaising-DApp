@@ -20,7 +20,7 @@
           cols="6"
         >
           <h2>Ongoing Events</h2><br>
-          <v-list class="elevation-1" v-if="mounted">
+          <v-list class="elevation-1" v-if="eventReady">
             <v-list-item-group>
               <v-list-item
                 v-for="(event, i) in ongoingEvents"
@@ -39,7 +39,7 @@
           cols="6"
         >
           <h2>Past Events</h2><br>
-          <v-list class="elevation-1" v-if="mounted">
+          <v-list class="elevation-1" v-if="eventReady">
             <v-list-item-group>
               <v-list-item
                 v-for="(event, i) in pastEvents"
@@ -73,7 +73,7 @@ export default {
     ongoingEvents: [],
     pastEvents: [],
     validCreator: false,
-    mounted: false
+    eventReady: false
   }),
   methods: {
     createEvent(){
@@ -91,8 +91,7 @@ export default {
       }
     },
     async getEventList(){
-      console.log(this.userName)
-      console.log(this.creator)
+      this.ongoingEvents = []
       let self = this.state.accounts[0]
       let len = await this.state.contract.methods.getEventListLength().call({from:self});
       for (let i = 0; i < len; i++) {
@@ -106,12 +105,20 @@ export default {
           }
         }
       }
-      this.mounted = true;
+      this.eventReady = true;
+    }
+  },
+  watch: {
+    creator: {
+      handler() {
+        this.eventReady = false;
+        this.getEventList()
+      },
+      immediate: true,
     }
   },
   mounted(){
     this.checkCreator()
-    this.getEventList()
   }
 }
 </script>
