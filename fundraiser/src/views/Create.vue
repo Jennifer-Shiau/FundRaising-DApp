@@ -89,8 +89,9 @@ export default {
     targetAmount: null,
     targetAmountRules: [ //rule: is digit
       v => !!v || 'Target amount is required',
+      v => !isNaN(parseInt(v)) && parseInt(v) > 0|| 'Target amount must be a number',
     ],
-    eventAddress: "0x48C6Ed71726E4800210bF748C8C2909acDd24b02",
+    eventAddress: "", //0x48C6Ed71726E4800210bF748C8C2909acDd24b02
     eventAddressRules:[
       v => !!v || 'Event address is required',
       v => (v && v.length == 42) || 'Event address must be 42 characters',
@@ -113,16 +114,16 @@ export default {
     reset () {
       this.$refs.form.reset()
     },
-    async createEvent(){//for debugging
+    async createEvent(){
       try {
         var self = this.state.accounts[0]
         await this.state.contract.methods.createEvent(this.eventName, this.creator, "...", this.targetAmount, 
               this.eventAddress, this.selectCategory).send({from: self})
+        this.toEventPage()
       } catch (error) {
         alert('Fail!')
-        console.log(error)
+        this.reset()
       }
-      this.toEventPage()
     }
   }
 }
