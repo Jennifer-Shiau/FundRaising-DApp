@@ -15,7 +15,8 @@ contract('Fundraiser', function (accounts) {
   const _donor = accounts[0];
   const _event = _eventAddress;
   const _amount = 1000;
-
+  const _eventType = "Natural Disaster";
+  
   it('Create an organization', async () => {
     let contract = await Fundraiser.deployed();
     await contract.createOrganization(_name, _password, {from:accounts[0]});
@@ -23,21 +24,9 @@ contract('Fundraiser', function (accounts) {
     assert.notEqual(result, 0);
   })
 
-  it('Check valid creator name', async () => {
-    let contract = await Fundraiser.deployed();
-    let result = true;
-    try {
-      await contract.createOrganization(_name, _password, {from:accounts[0]});
-    }
-    catch(error) {
-      result = false;
-    }
-    assert.equal(result, false);
-  })
-
   it('Create an event', async () => {
     let contract = await Fundraiser.deployed();
-    await contract.createEvent(_eventName, _creator, _intro, _targetAmount, _eventAddress, {from:accounts[0]});
+    await contract.createEvent(_eventName, _creator, _intro, _targetAmount, _eventAddress, _eventType, {from:accounts[0]});
     let result = await contract.addr2EventId(_eventAddress);
     assert.equal(result, 1);
   })
