@@ -100,7 +100,7 @@ export default {
       { name: 'Donations', intro: "Donations of small amount???", icon: ""},
       { name: 'Investments', intro: "Investments in startups or others.", icon: ""},
     ],
-    selectEvent: 1,
+    selectEvent: null,
     events: {
       'Natural Disasters': [],
       'Causes': [],
