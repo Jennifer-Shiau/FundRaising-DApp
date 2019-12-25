@@ -20,12 +20,6 @@
         <span class="mr-2">About</span>
       </v-btn>
 
-      <v-btn
-        text
-      >
-        <span class="mr-2">Events</span>
-      </v-btn>
-
       <v-btn v-if="loginStatus"
         @click="displayCompany"
         text
