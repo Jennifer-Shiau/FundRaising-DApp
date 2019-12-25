@@ -51,7 +51,7 @@
                           </v-col>
                           <v-col>
                             <v-container class="text-right">
-                              <v-card-text>{{ event['_receivedAmount']*1.0/event['_targetAmount'] * 100 }}%</v-card-text>
+                              <v-card-text>{{ (event['_receivedAmount']*1.0/event['_targetAmount'] * 100).toFixed(2) }}%</v-card-text>
                               <v-progress-linear
                                 disabled
                                 :background-opacity=0.3
