@@ -154,6 +154,84 @@
             </v-simple-table>
           </v-card>
       </v-row>
+      <v-row>
+        <v-card width="60%">
+            <v-card-title>Comments</v-card-title>
+              <v-list>
+                <v-list-group color="primary"
+                  v-for="(comment, i) in commentList"
+                  :key="i"
+                >
+                  <template v-slot:activator>
+                    <v-icon>mdi-account</v-icon>
+                    <v-divider inset></v-divider>
+                    <v-list-item-title>
+                      <v-row>
+                        <v-col class="text-left justify-center align-center">
+                        <h5>{{comment[0].slice(0, 42)}}</h5>
+                        <p>
+                          {{comment[0].slice(42)}}
+                        </p>
+                        </v-col>
+                      </v-row>
+                    </v-list-item-title>
+                  </template>
+                  <v-list-item round
+                    v-for="(reply, j) in comment.slice(1)"
+                    :key="`${reply}${j}`"
+                  >
+                    <v-list-item-content>
+                      <v-row>
+                        <v-col class="text-left justify-center align-center">
+                        <h5>{{reply.slice(0, 42)}}</h5>
+                        <p>
+                          {{reply.slice(42)}}
+                        </p>
+                        </v-col>
+                      </v-row>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item
+                  >
+                    <v-list-item-content>
+                      <v-row>
+                        <v-col>
+                          <v-textarea
+                            name="Reply"
+                            :label=self
+                            v-model="replyContent"
+                            rounded filled
+                            auto-grow
+                            rows="1"
+                            append-icon="mdi-send"
+                            @click:append="storeReply(i)"
+                            placeholder="Type a reply..."
+                          ></v-textarea>
+                        </v-col>
+                      </v-row>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-group>
+                <v-list-item-title>
+                  <v-row>
+                    <v-col>
+                      <v-textarea
+                        name="Reply"
+                        :label=self
+                        v-model="commentContent"
+                        rounded filled
+                        auto-grow
+                        rows="1"
+                        append-icon="mdi-send"
+                        @click:append="storeComment()"
+                        placeholder="Type a reply..."
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                  </v-list-item-title>
+              </v-list>
+          </v-card>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -177,7 +255,11 @@ export default {
     balance: null,
     txCount: 0,
     txList: [], //list of {'address': addr, 'amount': $} to preserve insert order
+    commentCount: 0,
+    commentList: [],
     validCreator: false,
+    replyContent: "",
+    commentContent: "",
     // for intro
     intro: "",
     introRules: [
@@ -244,6 +326,45 @@ export default {
         this.txList.push({'address': addr, 'amount': amount});
       }
       this.txCount = newCount;
+    },
+    async getReplies() {
+      console.log("GOT")
+      this.commentCount = await this.state.contract.methods.getCommentCount(this.eventId).call({from:this.self});
+      for (let i = 0; i < this.commentCount; i++){
+        let result = await this.state.contract.methods.getCommentsbyIdx(this.eventId, i).call({from:this.self});
+        this.commentList.push(result);
+      }
+      console.log(this.commentCount)
+      console.log(this.commentList)
+      console.log("done")
+    },
+    async updateReplies() {
+      let newCount = await this.state.contract.methods.getCommentCount(this.eventId).call({from:this.self});
+      console.log("in update await")
+      console.log(newCount);
+      for (let i = this.commentCount; i < newCount; i++){
+        let result = await this.state.contract.methods.getCommentsbyIdx(this.eventId, i).call({from:this.self});
+        this.commentList.push(result);
+      }
+      console.log(this.commentList)
+    },
+    async storeReply(cIdx){
+      if (this.commentList[cIdx].length < 10 && this.replyContent){
+        this.commentList[cIdx].push(this.self + this.replyContent)
+        await this.state.contract.methods.updateReply(this.eventId, cIdx, this.self + this.replyContent);
+        this.updateReplies();
+        this.replyContent = "";
+      } else {
+        alert("Reply count has reached max amount!")
+      }
+    },
+    async storeComment(){
+      if (this.commentContent){
+        this.commentList.push([this.self+this.commentContent])
+        await this.state.contract.methods.updateComment(this.eventId, this.self + this.commentContent);
+        this.updateReplies();
+        this.commentContent = "";
+      }
     }
   },
   async mounted() {
@@ -253,7 +374,9 @@ export default {
     this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
     this.checkCreator();
     this.intro = this.event['_intro'];
+    console.log("i'm here")
     this.getTx()
+    this.getReplies()
   }
 }
 </script>
