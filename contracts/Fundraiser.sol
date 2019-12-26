@@ -1,4 +1,5 @@
-pragma solidity ^0.5.8;
+// pragma solidity ^0.5.8;
+pragma experimental ABIEncoderV2;
 
 import "../node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
@@ -12,6 +13,7 @@ contract Fundraiser is ERC20 {
 
   mapping(address=>uint) public addr2EventId;
   mapping(string=>uint) public creatorName2Hash;
+  //company posts mapping
 
   uint _digits = 8;
   uint _modulus = 10 ** _digits;
@@ -27,7 +29,9 @@ contract Fundraiser is ERC20 {
     string _eventType;
     address[] _txAddress;
     uint256[] _txAmount;
-    // mapping(address=>uint256) _transactions;
+    uint256 _likes;
+    uint256 _dislikes;
+    string[][] _comments; //here x y is reversed. a dynamic array of length 10 arrays
   }
 
   Event[] public eventList;
@@ -37,11 +41,6 @@ contract Fundraiser is ERC20 {
   event Donate(address _donor, address _event, uint _amount);
   event DonationStored(uint _eventId, uint _amount); 	//cannot emit struct in event
 	event NewOrganization(string _name, string _password);
-
-  // modifier checkValidCreatorName(string memory _name) {
-  //   require(creatorName2Hash[_name] == 0, "Creator name is invalid.");
-  //   _;
-  // }
 
   function createOrganization(string memory _name, string memory _password) public payable {
     // create new organization
@@ -80,8 +79,9 @@ contract Fundraiser is ERC20 {
     // create new event
     address[] memory _txAddress;
     uint256[] memory _txAmount;
+    string[][] memory _comments;
     uint id = eventList.push(Event(_eventName, _creator, _intro, _targetAmount, 0, _eventAddress, true,
-      _eventType, _txAddress, _txAmount));
+      _eventType, _txAddress, _txAmount, 0, 0, _comments));
     addr2EventId[_eventAddress] = id;
     emit NewEvent(_eventName, _creator, _targetAmount,  _eventAddress, _intro, _eventType);
   }
@@ -144,4 +144,29 @@ contract Fundraiser is ERC20 {
 		// get txIdx transaction of eIdx event
 		return (eventList[eIdx]._txAddress[txIdx], eventList[eIdx]._txAmount[txIdx]);
 	}
+
+  function getCommentCount(uint eIdx) public view returns (uint) {
+		// get length of comment list of event eIdx
+		return eventList[eIdx]._comments.length;
+	}
+
+  function getCommentsbyIdx(uint eIdx, uint rIdx) public view returns(string[] memory){
+    //get a comment its replies of a certain event by eIdx and rIdx
+    uint n = eventList[eIdx]._comments[rIdx].length;
+    string[] memory ret = new string[](n);
+    for(uint i = 0; i < n; i++){
+      ret[i] = eventList[eIdx]._comments[rIdx][i];
+    }
+    return ret;
+  }
+
+  function updateComment(uint eIdx, string memory comment) public payable{
+    string[] memory newComment = new string[](1);
+    newComment[0] = comment;
+    eventList[eIdx]._comments.push(newComment);
+  }
+
+  function updateReply(uint eIdx, uint rIdx, string memory comment) public payable{
+    eventList[eIdx]._comments[rIdx].push(comment);
+  }
 }

@@ -351,7 +351,7 @@ export default {
     async storeReply(cIdx){
       if (this.commentList[cIdx].length < 10 && this.replyContent){
         this.commentList[cIdx].push(this.self + this.replyContent)
-        await this.state.contract.methods.updateReply(this.eventId, cIdx, this.self + this.replyContent);
+        await this.state.contract.methods.updateReply(this.eventId, cIdx, this.self + this.replyContent).send({from: this.self});
         this.updateReplies();
         this.replyContent = "";
       } else {
@@ -361,7 +361,7 @@ export default {
     async storeComment(){
       if (this.commentContent){
         this.commentList.push([this.self+this.commentContent])
-        await this.state.contract.methods.updateComment(this.eventId, this.self + this.commentContent);
+        await this.state.contract.methods.updateComment(this.eventId, this.self + this.commentContent).send({from: this.self});
         this.updateReplies();
         this.commentContent = "";
       }
