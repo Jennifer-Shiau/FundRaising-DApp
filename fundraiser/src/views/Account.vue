@@ -328,21 +328,17 @@ export default {
       this.txCount = newCount;
     },
     async getReplies() {
-      console.log("GOT")
       this.commentCount = await this.state.contract.methods.getCommentCount(this.eventId).call({from:this.self});
       for (let i = 0; i < this.commentCount; i++){
         let result = await this.state.contract.methods.getCommentsbyIdx(this.eventId, i).call({from:this.self});
         this.commentList.push(result);
       }
-      console.log(this.commentCount)
-      console.log(this.commentList)
-      console.log("done")
     },
     async updateReplies() {
       let newCount = await this.state.contract.methods.getCommentCount(this.eventId).call({from:this.self});
-      console.log("in update await")
-      console.log(newCount);
-      for (let i = this.commentCount; i < newCount; i++){
+      // this.commentCount = newCount;
+      this.commentList = []
+      for (let i = this.commentCount; i < newCount; i++){ //start from beginning in case of replies
         let result = await this.state.contract.methods.getCommentsbyIdx(this.eventId, i).call({from:this.self});
         this.commentList.push(result);
       }
@@ -351,7 +347,8 @@ export default {
     async storeReply(cIdx){
       if (this.commentList[cIdx].length < 10 && this.replyContent){
         await this.state.contract.methods.updateReply(this.eventId, cIdx, this.self + this.replyContent).send({from: this.self});
-        this.updateReplies();
+        // this.updateReplies();
+        this.commentList[cIdx].push(this.self + this.replyContent);
         this.replyContent = "";
       } else {
         alert("Reply count has reached max amount!")
