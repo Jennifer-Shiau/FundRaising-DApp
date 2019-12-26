@@ -1,5 +1,213 @@
 <template>
   <div class="account">
+    <v-container>
+      <v-row>
+        <v-col
+          cols="6"
+          md="6"
+          align="left"
+        >
+          <span class="display-1 mr-10">{{ event['_eventName'] }}</span>
+          <span class="grey--text">{{ event['_creator'] }}</span>
+          <v-icon
+            @click="toCompany"
+          >
+            mdi-chevron-right
+          </v-icon>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col
+          cols="12"
+          md="7"
+        >
+          <v-card class="text-left body-2 px-5 my-5">
+            <v-row>
+              <v-col>Address</v-col>
+              <v-col>{{ event['_eventAddress'] }}</v-col>
+            </v-row>
+            <v-row>
+              <v-col>Category</v-col>
+              <v-col>{{ event['_eventType'] }}</v-col>
+            </v-row>
+          </v-card>
+
+          <!-- Comments -->
+          <div>
+            <v-row>
+              <v-col>
+                <v-btn class="ma-2" text icon color="blue lighten-2">
+                  <v-icon large>mdi-thumb-up</v-icon>
+                </v-btn>
+                87
+              </v-col>
+
+              <v-col>
+                <v-btn class="ma-2" text icon color="red lighten-2">
+                  <v-icon large>mdi-thumb-down</v-icon>
+                </v-btn>
+                78
+              </v-col>
+
+              <v-col>
+                <v-btn class="ma-2" text icon color="grey darken-3">
+                  <v-icon large>mdi-message-text</v-icon>
+                </v-btn>
+                2
+              </v-col>
+            </v-row>
+          </div>
+        </v-col>
+
+        <v-col
+          cols="12"
+          md="5"
+        >
+          <!-- Intro -->
+          <v-card class="text-left body-2 px-5 my-5">
+            <v-row>
+              <v-col>Intro</v-col>
+              <v-col align="right">
+                <v-dialog v-model="dialog" v-if="validCreator" persistent max-width="600px">
+                  <template v-slot:activator="{ on }">
+                    <v-icon
+                      small
+                      class="mr-2"
+                      v-on="on"
+                    >
+                      mdi-border-color
+                    </v-icon>
+                  </template>
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">Edit Intro</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12">
+                            <v-text-field
+                              v-model="intro"
+                              :counter="50"
+                              :rules="introRules"
+                              label="Intro"
+                              required
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
+                      <v-btn color="blue darken-1" text @click="edit">Save</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>{{ event['_intro'] }}</v-col>
+            </v-row>
+          </v-card>
+
+          <!-- Donate -->
+          <v-col v-if="!loginStatus">
+            <v-row justify="end" v-if="event['_ongoing']">
+              <v-dialog v-model="dialog" persistent max-width="600px">
+                <template v-slot:activator="{ on }">
+                  <v-btn color="deep-orange darken-1" dark v-on="on">Donate</v-btn>
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">Donate</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="amount"
+                            :rules="amountRules"
+                            label="Amount"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text @click="donate">Confirm</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-row>
+            <!-- Past -->
+            <v-row justify="end" v-else>
+              <v-btn disabled>Closed</v-btn>
+            </v-row>
+          </v-col>
+          
+          <v-col v-else>
+            <v-row justify="end" v-if="event['_ongoing']">
+              <v-btn disabled>Donate</v-btn>
+            </v-row>
+            <!-- Past -->
+            <v-row justify="end" v-else>
+              <v-btn disabled>Closed</v-btn>
+            </v-row>
+          </v-col>
+
+          <!-- Progress -->
+          <v-col>
+            <v-container class="text-right">
+              <v-card-text>{{ (event['_receivedAmount']*1.0/event['_targetAmount'] * 100).toFixed(2) }}%</v-card-text>
+              <v-progress-linear
+                disabled
+                :background-opacity=0.3
+                :value="event['_receivedAmount']*1.0/event['_targetAmount'] * 100"
+                rounded
+                color="deep-orange lighten-1"
+                height="8"
+                dark
+              >
+              </v-progress-linear>
+              <v-card-text>{{ event['_receivedAmount'] }} / {{ event['_targetAmount'] }}</v-card-text>
+            </v-container>
+          </v-col>
+
+          <!-- Transactions -->
+          <v-card class="my-5">
+            <v-card-title>Transactions</v-card-title>
+            <v-simple-table>
+              <template v-slot:default>
+                <tbody class="text-left">
+                  <tr>
+                    <th>Donor Address</th>
+                    <th>Donation Amount</th>
+                    <td></td>
+                  </tr>
+                  <tr 
+                    v-for="(tx, i) in txList"
+                    :key="i"
+                  >
+                    <td>{{ tx.address }}</td>
+                    <td>{{ tx.amount }}</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-card>
+
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <!-- original -->
     <v-container fluid>
       <h2 class="font-weight-light display-1">{{ event['_eventName'] }}</h2>
       <v-row>
