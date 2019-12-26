@@ -376,7 +376,8 @@
                     <v-list-item-title>
                       <v-row>
                         <v-col class="text-left justify-center align-center">
-                        <h5>{{comment[0].slice(0, 42)}}</h5>
+                        <h5 v-if="comment[0].slice(0, 42) === event['_eventAddress']">{{ event['_creator'] }}</h5>
+                        <h5 v-else>{{comment[0].slice(0, 42)}}</h5>
                         <p>
                           {{comment[0].slice(42)}}
                         </p>
@@ -391,7 +392,8 @@
                     <v-list-item-content>
                       <v-row>
                         <v-col class="text-left justify-center align-center">
-                        <h5>{{reply.slice(0, 42)}}</h5>
+                        <h5 v-if="reply.slice(0, 42) === event['_eventAddress']">{{ event['_creator'] }}</h5>
+                        <h5 v-else>{{reply.slice(0, 42)}}</h5>
                         <p>
                           {{reply.slice(42)}}
                         </p>
@@ -550,7 +552,6 @@ export default {
         let result = await this.state.contract.methods.getCommentsbyIdx(this.eventId, i).call({from:this.self});
         this.commentList.push(result);
       }
-      console.log(this.commentList)
     },
     async storeReply(cIdx){
       if (this.commentList[cIdx].length < 10 && this.replyContent){
@@ -577,7 +578,6 @@ export default {
     this.balance = await this.state.contract.methods.getBalance(this.event['_eventAddress']).call({from: this.self});
     this.checkCreator();
     this.intro = this.event['_intro'];
-    console.log("i'm here")
     this.getTx()
     this.getReplies()
   }
