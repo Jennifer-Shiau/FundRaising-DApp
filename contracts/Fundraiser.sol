@@ -13,6 +13,8 @@ contract Fundraiser is ERC20 {
 
   mapping(address=>uint) public addr2EventId;
   mapping(string=>uint) public creatorName2Hash;
+  mapping(string=>uint) public creatorName2OrgId;
+
   //company posts mapping
 
   uint _digits = 8;
@@ -34,13 +36,16 @@ contract Fundraiser is ERC20 {
     string[][] _comments; //here x y is reversed. a dynamic array of length 10 arrays
   }
 
-  Event[] public eventList;
+  struct Organization {
+    string _userName;
+    string _intro;
+    uint256 _likes;
+    uint256 _dislikes;
+    string[][] _posts;
+  }
 
-  // events
-	event NewEvent(string _name, string _creator, uint256 _target, address _event, string _intro, string _type);
-  event Donate(address _donor, address _event, uint _amount);
-  event DonationStored(uint _eventId, uint _amount); 	//cannot emit struct in event
-	event NewOrganization(string _name, string _password);
+  Event[] public eventList;
+  Organization[] public orgList;
 
   function createOrganization(string memory _name, string memory _password) public payable {
     // create new organization
@@ -48,7 +53,8 @@ contract Fundraiser is ERC20 {
     uint _passwordCode = uint(keccak256(abi.encodePacked(_password))) % _modulus;
     uint _code = _nameCode * _modulus + _passwordCode;
     creatorName2Hash[_name] = _code;
-		emit NewOrganization(_name, _password);
+    string[][] memory _comments;
+    orgList.push(Organization(_name, "", 0, 0, _comments));
   }
 
   function checkValidName(string memory _name) public view returns (bool) {
@@ -83,7 +89,6 @@ contract Fundraiser is ERC20 {
     uint id = eventList.push(Event(_eventName, _creator, _intro, _targetAmount, 0, _eventAddress, true,
       _eventType, _txAddress, _txAmount, 0, 0, _comments));
     addr2EventId[_eventAddress] = id;
-    emit NewEvent(_eventName, _creator, _targetAmount,  _eventAddress, _intro, _eventType);
   }
 
   function donate(address _donor, address payable _event, uint _amount) public payable {
@@ -96,10 +101,10 @@ contract Fundraiser is ERC20 {
 		transfer(_event, _amount);
     storeDonation(_donor, _event, _amount);
     updateOngoing(_id);
-    emit Donate(_donor, _event, _amount);
   }
 
   function editIntro(uint _id, string memory _intro) public payable {
+    // edit event intro
     eventList[_id]._intro = _intro;
   }
 
@@ -109,7 +114,6 @@ contract Fundraiser is ERC20 {
 		eventList[_id]._txAddress.push(_donor);
     eventList[_id]._txAmount.push(_amount);
     eventList[_id]._receivedAmount += _amount;
-    emit DonationStored(_id, _amount);
   }
 
   function updateOngoing(uint _id) private {
@@ -151,7 +155,7 @@ contract Fundraiser is ERC20 {
 	}
 
   function getCommentsbyIdx(uint eIdx, uint rIdx) public view returns(string[] memory){
-    //get a comment its replies of a certain event by eIdx and rIdx
+    // get a comment and its replies of a certain event by eIdx and rIdx
     uint n = eventList[eIdx]._comments[rIdx].length;
     string[] memory ret = new string[](n);
     for(uint i = 0; i < n; i++){
@@ -161,12 +165,56 @@ contract Fundraiser is ERC20 {
   }
 
   function updateComment(uint eIdx, string memory comment) public payable{
+    // update event comment
     string[] memory newComment = new string[](1);
     newComment[0] = comment;
     eventList[eIdx]._comments.push(newComment);
   }
 
-  function updateReply(uint eIdx, uint rIdx, string memory comment) public payable{
+  function updateReply(uint eIdx, uint rIdx, string memory comment) public payable {
+    // update event reply
     eventList[eIdx]._comments[rIdx].push(comment);
+  }
+
+  function updateLikes(uint eIdx, uint256 _newLikes) public payable {
+    // update likes for event
+    eventList[eIdx]._likes = _newLikes;
+  }
+
+  function updateDislikes(uint eIdx, uint256 _newDislikes) public payable {
+    // update dislikes for event
+    eventList[eIdx]._dislikes = _newDislikes;
+  }
+
+  function updateOrgLikes(uint oIdx, uint256 _newLikes) public payable {
+    // update likes for organization
+    orgList[oIdx]._likes = _newLikes;
+  }
+
+  function updateOrgDislikes(uint oIdx, uint256 _newDislikes) public payable {
+    // update dislikes for organization
+    orgList[oIdx]._dislikes = _newDislikes;
+  }
+
+  function updateOrgIntro(uint oIdx, string memory _intro) public payable {
+    // update intro for organization
+    orgList[oIdx]._intro = _intro;
+  }
+
+  function updateOrgPosts(uint oIdx, string memory _post) public payable {
+    // update organization posts
+    string[] memory newPost = new string[](1);
+    newPost[0] = _post;
+    orgList[oIdx]._posts.push(newPost);
+  }
+
+  function updateOrgPostReply(uint oIdx, uint pIdx, string memory _post) public payable {
+    // update organization post reply for pIdx post
+    orgList[oIdx]._posts[pIdx].push(_post);
+  }
+
+  function editOrgIntro(uint oIdx, string memory _intro) public payable {
+    // edit organization intro
+    orgList[oIdx]._intro = _intro;
   }
 }
