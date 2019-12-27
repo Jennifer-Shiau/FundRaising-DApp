@@ -624,7 +624,7 @@ export default {
       }
       this.txCount = newCount;
     },
-    async getReplies() {
+    async getComments() {
       this.commentCount = await this.state.contract.methods.getCommentCount(this.eventId).call({from:this.self});
       for (let i = 0; i < this.commentCount; i++){
         let result = await this.state.contract.methods.getCommentsbyIdx(this.eventId, i).call({from:this.self});
@@ -633,9 +633,7 @@ export default {
     },
     async updateReplies() {
       let newCount = await this.state.contract.methods.getCommentCount(this.eventId).call({from:this.self});
-      // this.commentCount = newCount;
-      // this.commentList = []
-      for (let i = this.commentCount; i < newCount; i++){ //start from beginning in case of replies
+      for (let i = this.commentCount; i < newCount; i++){
         let result = await this.state.contract.methods.getCommentsbyIdx(this.eventId, i).call({from:this.self});
         this.commentList.push(result);
       }
@@ -643,7 +641,6 @@ export default {
     async storeReply(cIdx){
       if (this.commentList[cIdx].length < 10 && this.replyContent){
         await this.state.contract.methods.updateReply(this.eventId, cIdx, this.self + this.replyContent).send({from: this.self});
-        // this.updateReplies();
         this.commentList[cIdx].push(this.self + this.replyContent);
         this.replyContent = "";
       } else {
@@ -666,7 +663,7 @@ export default {
     this.checkCreator();
     this.intro = this.event['_intro'];
     this.getTx()
-    this.getReplies()
+    this.getComments()
   }
 }
 </script>
