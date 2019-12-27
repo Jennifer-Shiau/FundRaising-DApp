@@ -40,14 +40,14 @@
                 <v-btn class="ma-2" text icon color="blue lighten-2">
                   <v-icon large>mdi-thumb-up</v-icon>
                 </v-btn>
-                87
+                {{ likeCount }}
               </v-col>
 
               <v-col>
                 <v-btn class="ma-2" text icon color="red lighten-2">
                   <v-icon large>mdi-thumb-down</v-icon>
                 </v-btn>
-                78
+                {{ dislikeCount }}
               </v-col>
 
               <v-col>
@@ -546,6 +546,8 @@ export default {
     balance: null,
     txCount: 0,
     txList: [], //list of {'address': addr, 'amount': $} to preserve insert order
+    likeCount: 87,
+    dislikeCount: 78,
     commentCount: 0,
     commentList: [],
     validCreator: false,

@@ -41,7 +41,7 @@
         <v-expansion-panels focusable>
           <v-expansion-panel>
             <v-expansion-panel-header class="title light-green lighten-4">
-              I’m an organization (recieve donations)
+              I’m an organization (Raise Funds)
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-card
@@ -100,7 +100,7 @@
 
           <v-expansion-panel>
             <v-expansion-panel-header class="title light-green lighten-4">
-              I’m a donor (make donations)
+              I’m a donor (Make Donations)
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-card
