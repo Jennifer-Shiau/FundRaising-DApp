@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <div align="center">
-      <v-img src="https://i.imgur.com/LblQ2Qg.png" aspect-ratio="2.7" max-width="1000"></v-img>
+      <v-img src="https://i.imgur.com/AZm0h1U.jpg" aspect-ratio="1.8" max-width="1000"></v-img>
     </div>
     <br/><br/><br/>
     <div class="display-3 font-weight-bold font-italic amber--text text--darken-2">
