@@ -54,10 +54,89 @@
                 <v-btn class="ma-2" text icon color="grey darken-3">
                   <v-icon large>mdi-message-text</v-icon>
                 </v-btn>
-                2
+                {{ commentCount }}
               </v-col>
             </v-row>
           </div>
+
+          <v-card class="px-5 my-5">
+            <v-card-title>Comments</v-card-title>
+              <v-list>
+                <v-list-group color="primary"
+                  v-for="(comment, i) in commentList"
+                  :key="i"
+                >
+                  <template v-slot:activator>
+                    <v-icon>mdi-account</v-icon>
+                    <v-divider inset></v-divider>
+                    <v-list-item-title>
+                      <v-row>
+                        <v-col class="text-left justify-center align-center">
+                        <h5 v-if="comment[0].slice(0, 42) === event['_eventAddress']">{{ event['_creator'] }}</h5>
+                        <h5 v-else>{{comment[0].slice(0, 42)}}</h5>
+                        <p>
+                          {{comment[0].slice(42)}}
+                        </p>
+                        </v-col>
+                      </v-row>
+                    </v-list-item-title>
+                  </template>
+                  <v-list-item round
+                    v-for="(reply, j) in comment.slice(1)"
+                    :key="`${reply}${j}`"
+                  >
+                    <v-list-item-content>
+                      <v-row>
+                        <v-col class="text-left justify-center align-center">
+                        <h5 v-if="reply.slice(0, 42) === event['_eventAddress']">{{ event['_creator'] }}</h5>
+                        <h5 v-else>{{reply.slice(0, 42)}}</h5>
+                        <p>
+                          {{reply.slice(42)}}
+                        </p>
+                        </v-col>
+                      </v-row>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item
+                  >
+                    <v-list-item-content>
+                      <v-row>
+                        <v-col>
+                          <v-textarea
+                            name="Reply"
+                            :label=self
+                            v-model="replyContent"
+                            rounded filled
+                            auto-grow
+                            rows="1"
+                            append-icon="mdi-send"
+                            @click:append="storeReply(i)"
+                            placeholder="Type a reply..."
+                          ></v-textarea>
+                        </v-col>
+                      </v-row>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-group>
+                <v-list-item-title>
+                  <v-row>
+                    <v-col>
+                      <v-textarea
+                        name="Reply"
+                        :label=self
+                        v-model="commentContent"
+                        rounded filled
+                        auto-grow
+                        rows="1"
+                        append-icon="mdi-send"
+                        @click:append="storeComment()"
+                        placeholder="Type a reply..."
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                  </v-list-item-title>
+              </v-list>
+          </v-card>
         </v-col>
 
         <v-col
@@ -208,6 +287,7 @@
     </v-container>
 
     <!-- original -->
+    <!--
     <v-container fluid>
       <h2 class="font-weight-light display-1">{{ event['_eventName'] }}</h2>
       <v-row>
@@ -443,6 +523,7 @@
           </v-card>
       </v-row>
     </v-container>
+    -->
   </div>
 </template>
 
