@@ -628,7 +628,7 @@ export default {
     async updateReplies() {
       let newCount = await this.state.contract.methods.getCommentCount(this.eventId).call({from:this.self});
       // this.commentCount = newCount;
-      this.commentList = []
+      // this.commentList = []
       for (let i = this.commentCount; i < newCount; i++){ //start from beginning in case of replies
         let result = await this.state.contract.methods.getCommentsbyIdx(this.eventId, i).call({from:this.self});
         this.commentList.push(result);
