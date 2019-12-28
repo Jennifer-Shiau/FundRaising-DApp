@@ -54,7 +54,8 @@ contract Fundraiser is ERC20 {
     uint _code = _nameCode * _modulus + _passwordCode;
     creatorName2Hash[_name] = _code;
     string[][] memory _comments;
-    orgList.push(Organization(_name, "", 0, 0, _comments));
+    uint _id = orgList.push(Organization(_name, "", 0, 0, _comments));
+    creatorName2OrgId[_name] = _id;
   }
 
   function checkValidName(string memory _name) public view returns (bool) {

@@ -78,7 +78,7 @@
         <v-tabs-items v-model="select">
           <v-tab-item>
             <v-list>
-                <v-list-item-title>
+                <v-list-item-title v-if="validCreator">
                   <v-row>
                     <v-col>
                       <v-textarea
@@ -208,6 +208,7 @@ export default {
     orgId: null,
     posts: [],
     postContent: "",
+    postCount: 0,
     replyContent: "",
     validCreator: false,
     eventReady: false,
@@ -230,7 +231,7 @@ export default {
       }
     },
     async getOrgNPosts(){
-      this.orgId = await this.state.contract.methods.creatorName2OrgId(this.creator).call({from: this.self});
+      this.orgId = await this.state.contract.methods.creatorName2OrgId(this.creator).call({from: this.self}) - 1;
       this.org = await this.state.contract.methods.orgList(this.orgId).call({from:this.self});
       this.getPosts()
     },
@@ -251,7 +252,6 @@ export default {
       this.eventReady = true;
     },
     async getPosts() {
-      console.log(this.orgId)
       this.postCount = await this.state.contract.methods.getPostCount(this.orgId).call({from:this.self});
       for (let i = 0; i < this.postCount; i++){
         let p = await this.state.contract.methods.getPostsbyIdx(this.orgId, i).call({from:this.self});
@@ -272,6 +272,7 @@ export default {
         let p = await this.state.contract.methods.getPostsbyIdx(this.orgId, i).call({from:this.self});
         this.posts.push(p);
       }
+      this.postCount = newCount;
     },
     async storeReply(reversePIdx){ // store reply into contract and update frontend
       let pIdx = this.posts.length - reversePIdx - 1
