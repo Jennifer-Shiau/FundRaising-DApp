@@ -273,7 +273,8 @@ export default {
         this.posts.push(p);
       }
     },
-    async storeReply(pIdx){ // store reply into contract and update frontend
+    async storeReply(reversePIdx){ // store reply into contract and update frontend
+      let pIdx = this.posts.length - reversePIdx - 1
       if (this.posts[pIdx].length < 10 && this.replyContent){
         await this.state.contract.methods.updatePostReply(this.orgId, pIdx, this.self + this.replyContent).send({from: this.self});
         this.posts[pIdx].push(this.self + this.replyContent);
@@ -290,8 +291,6 @@ export default {
         this.eventReady = false;
         this.postReady = false;
         this.getOrgNPosts()
-        console.log("done org")
-        console.log("done get posts")
         this.getEventList()
         this.checkCreator()
       },
