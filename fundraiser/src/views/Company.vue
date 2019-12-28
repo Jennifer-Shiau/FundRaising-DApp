@@ -257,8 +257,6 @@ export default {
         let p = await this.state.contract.methods.getPostsbyIdx(this.orgId, i).call({from:this.self});
         this.posts.push(p);
       }
-      // this.posts.push(['PostA', 'ReplyA'])
-      // this.posts.push(['PostB', 'ReplyB'])
       this.postReady = true;
     },
     async storePost() { // store new post into contract
@@ -291,11 +289,8 @@ export default {
         this.self = this.state.accounts[0];
         this.eventReady = false;
         this.postReady = false;
-        // this.orgId = await this.state.contract.methods.creatorName2OrgId(this.creator).call({from: this.self});
-        // this.org = await this.state.contract.methods.orgList(this.orgId).call({from: this.self});
         this.getOrgNPosts()
         console.log("done org")
-        // this.getPosts()
         console.log("done get posts")
         this.getEventList()
         this.checkCreator()

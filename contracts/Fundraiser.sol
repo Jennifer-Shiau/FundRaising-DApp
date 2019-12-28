@@ -186,6 +186,21 @@ contract Fundraiser is ERC20 {
     eventList[eIdx]._dislikes = _newDislikes;
   }
 
+  function getPostCount(uint oIdx) public view returns (uint) {
+		// get post count of org
+		return orgList[oIdx]._posts.length;
+	}
+
+  function getPostsbyIdx(uint oIdx, uint pIdx) public view returns(string[] memory){
+    // get a post and its replies of a certain org by oIdx and pIdx
+    uint n = orgList[oIdx]._posts[pIdx].length;
+    string[] memory ret = new string[](n);
+    for(uint i = 0; i < n; i++){
+      ret[i] = orgList[oIdx]._posts[pIdx][i];
+    }
+    return ret;
+  }
+
   function updateOrgLikes(uint oIdx, uint256 _newLikes) public payable {
     // update likes for organization
     orgList[oIdx]._likes = _newLikes;
@@ -201,16 +216,16 @@ contract Fundraiser is ERC20 {
     orgList[oIdx]._intro = _intro;
   }
 
-  function updateOrgPosts(uint oIdx, string memory _post) public payable {
+  function updatePost(uint oIdx, string memory _post) public payable {
     // update organization posts
     string[] memory newPost = new string[](1);
     newPost[0] = _post;
     orgList[oIdx]._posts.push(newPost);
   }
 
-  function updateOrgPostReply(uint oIdx, uint pIdx, string memory _post) public payable {
+  function updatePostReply(uint oIdx, uint pIdx, string memory _reply) public payable {
     // update organization post reply for pIdx post
-    orgList[oIdx]._posts[pIdx].push(_post);
+    orgList[oIdx]._posts[pIdx].push(_reply);
   }
 
   function editOrgIntro(uint oIdx, string memory _intro) public payable {
