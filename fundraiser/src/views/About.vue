@@ -41,7 +41,7 @@
         <v-expansion-panels focusable>
           <v-expansion-panel>
             <v-expansion-panel-header class="title light-green lighten-4">
-              I’m an organization (Raise Funds)
+              I'm an organization (Raise Funds)
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-card
@@ -53,13 +53,13 @@
                     STEP 1  Create Account
                   </p>
                   <p class="subtitle-1 text--grey">
-                    Skip this step if you aready have an account
+                    Skip this step if you aready have an account.
                   </p>
                   <div class="body-1 text--primary">
                     <p>Click <kbd>SIGN UP</kbd> on the upper right corner of the window.</p>
                     <p>Enter your username and password.</p>
-                    <p>(Optional) Edit your profile: upload a photo, add descriptions about yourself 
-                      and links to your own website or social media.</p>
+                    <p>(Optional) Edit your profile: add descriptions about yourself (finished), 
+                      upload a photo and add links to your own website or social media (not finished).</p>
                     <p>In your profile, people can thumb up or down to your organization. 
                       You can post news on it and interact with doners.</p>
                   </div>
@@ -77,7 +77,7 @@
                     STEP 3  Create Event
                   </p>
                   <div class="body-1 text--primary">
-                    <p>Go to <kbd>COMPANY</kbd> page and click <kbd>CREATE EVENT</kbd></p>
+                    <p>Go to the <kbd>PROFILE</kbd> page and click <kbd>CREATE EVENT</kbd>.</p>
                     <p>Enter event information.</p>
                     <p>Each event needs its own MetaMask account.</p>
                     <p>When the received donation amount achieves the target amount, 
@@ -89,9 +89,9 @@
                     STEP 4  Post
                   </p>
                   <div class="body-1 text--primary">
-                    <p>Go to <kbd>COMPANY</kbd> page and click <kbd>+</kbd></p>
+                    <p>Go to the <kbd>PROFILE</kbd> page.</p>
                     <p>We only support "text" post.</p>
-                    <p>People and you can comment below your post.</p>
+                    <p>People and you can reply your posts.</p>
                   </div>
                 </v-card-text>
               </v-card>
@@ -100,7 +100,7 @@
 
           <v-expansion-panel>
             <v-expansion-panel-header class="title light-green lighten-4">
-              I’m a donor (Make Donations)
+              I'm a donor (Make Donations)
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-card
@@ -122,8 +122,7 @@
                     STEP 2  Explore
                   </p>
                   <div class="body-1 text--primary">
-                    <p>On the <kbd>HOME</kbd> page, you can get recent events catagorized 
-                      by different tags.</p>
+                    <p>On the <kbd>HOME</kbd> page, you can get recent events categorized by different tags.</p>
                     <p>You can also see the information, posts, ongoing events and past events of organizations.</p>
                   </div>
 
@@ -140,7 +139,7 @@
                   </p>
                   <div class="body-1 text--primary">
                     <p>On the event page, you can see all information about this event.</p>
-                    <p>Click <kbd>DONATE</kbd> and enter the amount you want to donate</p>
+                    <p>Click <kbd>DONATE</kbd> and enter the amount you want to donate.</p>
                   </div>
                 </v-card-text>
               </v-card>

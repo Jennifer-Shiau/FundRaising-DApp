@@ -15,7 +15,7 @@
                       >
                         <v-text-field
                           v-model="username"
-                          :counter="10"
+                          :counter="30"
                           :rules="usernameRules"
                           label="Username"
                           required
@@ -63,7 +63,7 @@ export default {
       username: '',
       usernameRules: [
         v => !!v || 'Username is required',
-        v => (v && v.length <= 20) || 'Username must be less than 20 characters',
+        v => (v && v.length <= 30) || 'Username must be less than 30 characters',
       ],
       password: '',
       passwordRules: [

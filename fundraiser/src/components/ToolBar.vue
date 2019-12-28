@@ -24,7 +24,7 @@
         @click="displayCompany"
         text
       >
-        <span class="mr-2">Company</span>
+        <span class="mr-2">Profile</span>
       </v-btn>
       
       <v-spacer></v-spacer>

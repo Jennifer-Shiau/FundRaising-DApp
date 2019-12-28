@@ -15,7 +15,7 @@
                       >
                         <v-text-field
                           v-model="username"
-                          :counter="10"
+                          :counter="30"
                           :rules="usernameRules"
                           label="Username"
                           required
@@ -68,7 +68,7 @@ export default {
       password: '',
       passwordRules: [
         v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || "Password must be longer than 6 characters",
+        // v => (v && v.length >= 6) || "Password must be longer than 6 characters",
       ],
       lazy: false,
     }),
