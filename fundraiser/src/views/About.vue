@@ -1,13 +1,13 @@
 <template>
   <div class="about">
     <div align="center">
-      <v-img src="https://i.imgur.com/AZm0h1U.jpg" aspect-ratio="1.8" max-width="1000"></v-img>
+      <v-img src="https://i.imgur.com/h8UXNeF.png" aspect-ratio="3.7" max-width="1200"></v-img>
     </div>
     <br/><br/><br/>
     <div class="display-3 font-weight-bold font-italic amber--text text--darken-2">
       Few Clicks Make the World Better.
     </div>
-    <br/><br/><br/>
+    <br/><br/>
     <p class="title text--primary">
       In order to make the best of people's generosity, we introduce a DApp to make donations <br/>
       safer, easier, and more trustworthy with remarkable blockchain features.
