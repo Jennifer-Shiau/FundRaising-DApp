@@ -30,9 +30,62 @@
           <v-row v-if="postReady">
             <v-col cols="8" align="left">
               <h1>{{ creator }}</h1><br>
-              <h3>About as</h3>
-              <p>{{ org['_intro'] }}</p>
+              <!-- Intro -->
+              <v-row>
+                <v-col>
+                  <h3>About as</h3>
+                </v-col>
+                <v-col align="right">
+                  <v-dialog v-model="dialog" v-if="validCreator" persistent max-width="600px">
+                    <template v-slot:activator="{ on }">
+                      <v-icon
+                        small
+                        class="mr-2"
+                        v-on="on"
+                      >
+                        mdi-border-color
+                      </v-icon>
+                    </template>
+                    <v-card>
+                      <v-card-title>
+                        <span class="headline">Edit Intro</span>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12">
+                              <v-form
+                                ref="form"
+                                v-model="valid"
+                                :lazy-validation="lazy"
+                              >
+                                <v-text-field
+                                  v-model="intro"
+                                  :counter="500"
+                                  :rules="introRules"
+                                  label="Intro"
+                                  required
+                                ></v-text-field>
+                              </v-form>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
+                        <v-btn color="blue darken-1" text @click="edit">Save</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>{{ org['_intro'] }}</v-col>
+              </v-row>
             </v-col>
+
+            <!-- Create -->
             <v-col cols="4" v-if="validCreator">
               <v-btn
                 @click="createEvent"
@@ -48,14 +101,24 @@
             <v-col cols="8"></v-col>
             <v-col cols="2">
               <v-btn class="ma-2" text icon color="blue lighten-2">
-                <v-icon large>mdi-thumb-up</v-icon>
+                <v-icon
+                  @click="incrementLike"
+                  large
+                >
+                  mdi-thumb-up
+                </v-icon>
               </v-btn>
               {{ likeCount }}
             </v-col>
 
             <v-col cols="2">
               <v-btn class="ma-2" text icon color="red lighten-2">
-                <v-icon large>mdi-thumb-down</v-icon>
+                <v-icon
+                  @click="incrementDislike"
+                  large
+                >
+                  mdi-thumb-down
+                </v-icon>
               </v-btn>
               {{ dislikeCount }}
             </v-col>
@@ -212,8 +275,17 @@ export default {
     replyContent: "",
     validCreator: false,
     eventReady: false,
-    likeCount: 87,
-    dislikeCount: 78,
+    likeCount: 0,
+    dislikeCount: 0,
+    // for intro
+    valid: true,
+    lazy: false,
+    dialog: false,
+    intro: "",
+    introRules: [
+      v => !!v || 'Intro is required',
+      v => (v && v.length <= 500) || 'Intro must be less than 500 characters',
+    ],
   }),
   methods: {
     createEvent(){
@@ -230,10 +302,24 @@ export default {
         this.validCreator = true;
       }
     },
+    async edit() {
+      if (this.$refs.form.validate()) {
+        this.dialog = false;
+        await this.state.contract.methods.editOrgIntro(this.orgId, this.intro).send({from: this.self});
+        this.org = await this.state.contract.methods.orgList(this.orgId).call({from:this.self});
+      }
+    },
+    cancel() {
+      this.dialog = false;
+      this.intro = this.org['_intro'];
+    },
     async getOrgNPosts(){
       this.orgId = await this.state.contract.methods.creatorName2OrgId(this.creator).call({from: this.self}) - 1;
       this.org = await this.state.contract.methods.orgList(this.orgId).call({from:this.self});
-      this.getPosts()
+      this.getPosts();
+      this.intro = this.org['_intro'];
+      this.likeCount = this.org['_likes'];
+      this.dislikeCount = this.org['_dislikes'];
     },
     async getEventList(){
       this.ongoingEvents = []
@@ -284,6 +370,14 @@ export default {
         alert("Reply count has reached max amount!")
       }
     },
+    async incrementLike() {
+      await this.state.contract.methods.updateOrgLikes(this.orgId, +this.likeCount+1).send({from: this.self});
+      this.likeCount = +this.likeCount+1;
+    },
+    async incrementDislike() {
+      await this.state.contract.methods.updateOrgDislikes(this.orgId, +this.dislikeCount+1).send({from: this.self});
+      this.dislikeCount = +this.dislikeCount+1;
+    },
   },
   watch: {
     creator: {
@@ -291,9 +385,9 @@ export default {
         this.self = this.state.accounts[0];
         this.eventReady = false;
         this.postReady = false;
-        this.getOrgNPosts()
-        this.getEventList()
-        this.checkCreator()
+        this.getOrgNPosts();
+        this.getEventList();
+        this.checkCreator();
       },
       immediate: true,
     }

@@ -212,11 +212,6 @@ contract Fundraiser is ERC20 {
     orgList[oIdx]._dislikes = _newDislikes;
   }
 
-  function updateOrgIntro(uint oIdx, string memory _intro) public payable {
-    // update intro for organization
-    orgList[oIdx]._intro = _intro;
-  }
-
   function updatePost(uint oIdx, string memory _post) public payable {
     // update organization posts
     string[] memory newPost = new string[](1);
