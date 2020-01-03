@@ -27,13 +27,13 @@
         <v-col
           cols="8"
         >
-          <v-row v-if="postReady">
+          <v-row v-if="org">
             <v-col cols="8" align="left">
               <h1>{{ creator }}</h1><br>
               <!-- Intro -->
               <v-row>
                 <v-col>
-                  <h3>About as</h3>
+                  <h3>About</h3>
                 </v-col>
                 <v-col align="right">
                   <v-dialog v-model="dialog" v-if="validCreator" persistent max-width="600px">
@@ -343,7 +343,6 @@ export default {
         let p = await this.state.contract.methods.getPostsbyIdx(this.orgId, i).call({from:this.self});
         this.posts.push(p);
       }
-      this.postReady = true;
     },
     async storePost() { // store new post into contract
       if (this.postContent){
@@ -384,7 +383,6 @@ export default {
       handler() {
         this.self = this.state.accounts[0];
         this.eventReady = false;
-        this.postReady = false;
         this.getOrgNPosts();
         this.getEventList();
         this.checkCreator();
