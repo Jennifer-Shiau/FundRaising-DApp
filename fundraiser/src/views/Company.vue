@@ -84,23 +84,18 @@
                 <v-col>{{ org['_intro'] }}</v-col>
               </v-row>
             </v-col>
-
-            <!-- Create -->
-            <v-col cols="4" v-if="validCreator">
-              <v-btn
+          </v-row>
+          <v-row>
+              <v-col cols="4" v-if="validCreator">
+              <v-btn class="ma-2"
                 @click="createEvent"
-                color="primary"
-                class="my-10"
+                color="grey lighten-3"
               >
                 Create Event
               </v-btn>
             </v-col>
-          </v-row>
-          
-          <v-row>
-            <v-col cols="8"></v-col>
             <v-col cols="2">
-              <v-btn class="ma-2" text icon color="blue lighten-2">
+              <v-btn class="ma-2" text icon color="blue darken-1">
                 <v-icon
                   @click="incrementLike"
                   large
@@ -112,7 +107,7 @@
             </v-col>
 
             <v-col cols="2">
-              <v-btn class="ma-2" text icon color="red lighten-2">
+              <v-btn class="ma-2" text icon color="red darken-2">
                 <v-icon
                   @click="incrementDislike"
                   large
@@ -126,26 +121,15 @@
         </v-col>
       </v-row>
 
-      <v-flex>
-        <v-tabs
-          v-model="select"
-          background-color="transparent"
-          color="basil"
-          grow
-        >
-          <v-tab>Post</v-tab>
-          <v-tab>Ongoing Events</v-tab>
-          <v-tab>Past Events</v-tab>
-        </v-tabs>
-
-        <v-tabs-items v-model="select">
-          <v-tab-item>
-            <v-list>
-                <v-list-item-title v-if="validCreator">
+      <v-row>
+          <v-col>
+            <v-card v-if="validCreator" class="elevation-1">
                   <v-row>
-                    <v-col>
+                    <v-col
+                    class="align-center">
                       <v-textarea
                         name="Reply"
+                        :class="['pt-2', 'pl-5', 'pr-5']"
                         :label=self
                         v-model="postContent"
                         auto-grow outlined
@@ -156,25 +140,50 @@
                       ></v-textarea>
                     </v-col>
                   </v-row>
-                </v-list-item-title>
-                <v-list-group color="primary"
+            </v-card>
+            <div :class="['pt-10']"></div>
+            <v-list color="transparent">
+                <v-list-group no-action
                   v-for="(post, i) in posts.slice().reverse()"
                   :key="i"
                 >
                   <template v-slot:activator>
-                    <v-icon>mdi-account</v-icon>
-                    <v-divider inset></v-divider>
-                    <v-list-item-title>
-                      <v-row>
-                        <v-col class="text-left justify-center align-center">
-                        <h5>{{ creator }}</h5>
-                        <p>
-                          {{post[0]}}
-                        </p>
-                        </v-col>
-                      </v-row>
-                    </v-list-item-title>
+                    <div :class="['pt-5', 'pb-5']">         
+                    <v-card class="elevation-1 text-left justify-center 
+                    align-center"
+                    :class="['pl-5', 'pr-5']"
+                    width="600"
+                    >
+                      <v-card-title>
+                        <v-icon
+                          large
+                          left
+                        >
+                          mdi-coin
+                        </v-icon>
+                        <span class="title font-weight-light">Fundraising DApp</span>
+                      </v-card-title>
+                      <v-card-text class="headline font-weight-bold">
+                        {{post[0]}}
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-list-item class="grow">
+                          <v-list-item-avatar color="grey darken-3">
+                            <v-img
+                              class="elevation-1"
+                              src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                            ></v-img>
+                          </v-list-item-avatar>
+
+                          <v-list-item-content>
+                            <v-list-item-title>{{creator}}</v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-card-actions>
+                    </v-card>
+                    </div>
                   </template>
+                  <v-divider inset></v-divider>
                   <v-list-item round
                     v-for="(reply, j) in post.slice(1)"
                     :key="`${reply}${j}`"
@@ -188,6 +197,7 @@
                         </p>
                         </v-col>
                       </v-row>
+                      <v-divider></v-divider>
                     </v-list-item-content>
                   </v-list-item>
                   <v-list-item
@@ -210,12 +220,17 @@
                       </v-row>
                     </v-list-item-content>
                   </v-list-item>
-                </v-list-group>
+                  </v-list-group>
               </v-list>
-          </v-tab-item>
+          </v-col>
 
-          <v-tab-item>
-            <v-list class="elevation-1" v-if="eventReady">
+          <v-col>
+            <v-card class="elevation-1 text-left justify-center 
+                    align-center"
+                    :class="['pl-5', 'pr-5']"
+                    width="400">
+            <v-card-title>Ongoing Events</v-card-title>
+            <v-list class="elevation-0" v-if="eventReady">
               <v-list-item-group>
                 <v-list-item
                   v-for="(event, i) in ongoingEvents"
@@ -228,10 +243,14 @@
                 </v-list-item>
               </v-list-item-group>
             </v-list>
-          </v-tab-item>
-
-          <v-tab-item>
-            <v-list class="elevation-1" v-if="eventReady">
+            </v-card>
+            <div :class="['pt-10']"></div>
+            <v-card class="elevation-1 text-left justify-center 
+                    align-center"
+                    :class="['pl-5', 'pr-5']"
+                    width="400">
+            <v-card-title>Past Events</v-card-title>
+            <v-list class="elevation-0" v-if="eventReady">
               <v-list-item-group>
                 <v-list-item
                   v-for="(event, i) in pastEvents"
@@ -244,9 +263,9 @@
                 </v-list-item>
               </v-list-item-group>
             </v-list>
-          </v-tab-item>
-        </v-tabs-items>
-      </v-flex>
+            </v-card>
+          </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
