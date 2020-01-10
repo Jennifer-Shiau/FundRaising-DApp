@@ -141,7 +141,7 @@
                     </v-col>
                   </v-row>
             </v-card>
-            <div :class="['pt-10']"></div>
+            <div v-if="validCreator" :class="['pt-10']"></div>
             <v-list color="transparent">
                 <v-list-group no-action
                   v-for="(post, i) in posts.slice().reverse()"

@@ -96,7 +96,7 @@
             <div>
               <v-row>
                 <v-col>
-                  <v-btn class="ma-2" text icon color="blue lighten-2">
+                  <v-btn class="ma-2" text icon color="blue darken-1">
                     <v-icon
                       @click="incrementLike"
                       large
@@ -108,7 +108,7 @@
                 </v-col>
 
                 <v-col>
-                  <v-btn class="ma-2" text icon color="red lighten-2">
+                  <v-btn class="ma-2" text icon color="red darken-2">
                     <v-icon
                       @click="incrementDislike"
                       large
