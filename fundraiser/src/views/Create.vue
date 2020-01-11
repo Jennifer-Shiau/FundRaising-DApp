@@ -26,7 +26,7 @@
                             v-model="targetAmount"
                             :rules="targetAmountRules"
                             label="Target amount"
-                            suffix="ETH"
+                            suffix="tokens"
                             required
                         ></v-text-field>
 
