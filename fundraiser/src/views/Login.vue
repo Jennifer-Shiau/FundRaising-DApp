@@ -30,16 +30,16 @@
 
                         <v-btn
                           class="mr-4"
-                          @click="login"
+                          @click="reset"
                         >
-                          Login
+                          Reset Form
                         </v-btn>
 
                         <v-btn
                           class="mr-4"
-                          @click="reset"
+                          @click="login"
                         >
-                          Reset Form
+                          Login
                         </v-btn>
                     </v-form>
                   </v-container>

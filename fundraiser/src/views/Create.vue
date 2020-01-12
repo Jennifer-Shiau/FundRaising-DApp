@@ -47,16 +47,16 @@
 
                         <v-btn
                           class="mr-4"
-                          @click="createEvent"
+                          @click="reset"
                         >
-                          Create
+                          Reset Form
                         </v-btn>
 
                         <v-btn
                           class="mr-4"
-                          @click="reset"
+                          @click="createEvent"
                         >
-                          Reset Form
+                          Create
                         </v-btn>
                     </v-form>
                   </v-container>
