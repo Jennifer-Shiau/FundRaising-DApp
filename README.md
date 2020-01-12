@@ -37,19 +37,19 @@ $ npm run serve
     - Paste the private key of a ganache account.
 - Add token
 
-    ![](https://i.imgur.com/t95M7EH.png =200x)
-    
+    <img src="https://i.imgur.com/t95M7EH.png" width="200">
+
     - Choose `Custom Token`.
     - Enter **Contract Address** of Fundraiser and **Token Symbol** (e.g. FR). Set **Decimals of Precision** to 0.
 - Add network
     - Click `Settings`.
-
-    ![](https://i.imgur.com/G4ah1xW.png =200x)
+    
+    <img src="https://i.imgur.com/G4ah1xW.png" width="200">
     
     - Choose `Networks` > `Add Network`.
     - Set like this.
     
-    ![](https://i.imgur.com/wDvD94h.png =200x)
+    <img src="https://i.imgur.com/wDvD94h.png" width="200">
 
 - Log out of MetaMask. Log in again and connect to the new account you just imported.
 
@@ -60,14 +60,14 @@ $ npm run serve
     - Click `SIGN UP` / `LOG IN` on the upper right corner of the window.
     - Enter your username and password.
     
-    ![](https://i.imgur.com/zGamuqm.png =500x)
+    <img src="https://i.imgur.com/zGamuqm.png" width="500">
 
 - Create event
     - Go to the `PROFILE` page and click `CREATE EVENT`.
     - Enter event information.
     - Each event needs its own MetaMask account.
     
-    ![](https://i.imgur.com/am6nFqB.png =500x)
+    <img src="https://i.imgur.com/am6nFqB.png" width="500">
 
 - Post
     - Go to the `PROFILE` page.
@@ -102,7 +102,7 @@ $ npm run serve
     - Information of an event is displayed on the event page.
     - Click `DONATE` and enter the amount you want to donate.
 
-    ![](https://i.imgur.com/q9KkqVi.png =500x)
+    <img src="https://i.imgur.com/q9KkqVi.png" width="500">
 
 ## Demo Video
 [Link]()
