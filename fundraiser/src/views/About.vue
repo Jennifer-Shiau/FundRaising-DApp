@@ -4,38 +4,56 @@
       <v-img src="https://i.imgur.com/h8UXNeF.png" aspect-ratio="3.7" max-width="1200"></v-img>
     </div>
     <br/><br/><br/>
-    <div class="display-3 font-weight-bold font-italic amber--text text--darken-2">
-      Few Clicks Make the World Better.
+    <div class="display-3 font-weight-light font-italic amber--text text--darken-2">
+      A Few Clicks Make the World Better.
     </div>
     <br/><br/>
     <p class="title text--primary">
-      In order to make the best of people's generosity, we introduce a DApp to make donations <br/>
-      safer, easier, and more trustworthy with remarkable blockchain features.
+      The Fundraising DApp makes donations safer, easier, and more trustworthy with blockchain features.
     </p>
     <br/><br/>
 
-    <!-- What's more -->
+    <!-- Why blockchain? -->
     <v-container>
       <br/><br/>
-      <div class="display-2 light-green--text text--darken-2">What's more..</div>
+      <div class="display-2 font-weight-bold light-green--text text--darken-2">Why blockchain?</div>
       <br/><br/>
-      <p class="body-1 text--primary" align="left">
-        One of the key algorithms of blockchain, cryptographic hash function, keeps transactions 
-        unchangeable and thus ensures their safety. Decentralization publishes all transactions' information, 
-        which allows people to easily examine whether the organizations use your donations properly. 
-        Connecting to the MetaMask account, it takes only few clicks to donate and provide immediate 
-        assistance to those in need. This website collects all kinds of charity organizations around 
-        the world. People will no longer waste time visiting different websites for different events.
-      </p>
-      <p class="body-1 text--primary" align="left">
-        One website and few clicks can pass your kind heart to anywhere on earth reliably and without any danger.
-      </p>
+      <v-row>
+        <v-col>
+          <h1>Safety</h1><br/>
+          <p class="body-1 text--primary" align="left">
+            The cryptographic hash function keeps transactions 
+            immutable and thus ensures their safety. 
+          </p>
+        </v-col>
+        <v-col>
+          <h1>Transparency</h1><br/>
+            <p class="body-1 text--primary" align="left">
+              Decentralization allows people to easily examine whether the organizations use your donations properly. 
+            </p>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <h1>Efficiency</h1><br/>
+          <p class="body-1 text--primary" align="left">
+            With a MetaMask account, it takes only a few clicks to donate and provide immediate assistance to those in need. 
+            This website collects all kinds of charity and crowdsourcing organizations around the world.
+          </p>
+        </v-col>
+        <v-col>
+          <h1>No Middlemen Fees</h1><br/>
+          <p class="body-1 text--primary" align="left">
+            A centralized fundraising platform requires middlemen fees to maintain the server. With our decentralized app, all donations will be free.
+          </p>
+        </v-col>
+      </v-row>
     </v-container>
 
     <!-- How it works -->
     <v-container>
       <br/><br/>
-      <div class="display-2 light-green--text text--darken-2">How it works</div>
+      <div class="display-2 light-green--text font-weight-bold text--darken-2">How it works</div>
       <br/><br/>
 
         <v-expansion-panels focusable>
@@ -50,7 +68,7 @@
               >
                 <v-card-text>
                   <p class="display-1 text--primary">
-                    STEP 1  Create Account
+                    STEP 1  Create Fundraising DApp Account
                   </p>
                   <p class="subtitle-1 text--grey">
                     Skip this step if you aready have an account.
@@ -58,10 +76,10 @@
                   <div class="body-1 text--primary">
                     <p>Click <kbd>SIGN UP</kbd> on the upper right corner of the window.</p>
                     <p>Enter your username and password.</p>
-                    <p>(Optional) Edit your profile: add descriptions about yourself (finished), 
-                      upload a photo and add links to your own website or social media (not finished).</p>
-                    <p>In your profile, people can thumb up or down to your organization. 
-                      You can post news on it and interact with doners.</p>
+                    <p>Edit your profile: add descriptions about your organization, 
+                      and add links to your own website or social media.</p>
+                    <p>On the organization profile page, donors can press thumbs up or down for your organization. 
+                      News and stories can be posted to interact with donors.</p>
                   </div>
 
                   <p class="display-1 text--primary">
@@ -80,9 +98,9 @@
                     <p>Go to the <kbd>PROFILE</kbd> page and click <kbd>CREATE EVENT</kbd>.</p>
                     <p>Enter event information.</p>
                     <p>Each event needs its own MetaMask account.</p>
-                    <p>When the received donation amount achieves the target amount, 
-                      the event will be automatically closed and moved to "Past Events". 
-                      In this situation, people will no longer be able to donate to this event.</p>
+                    <p>When the received donation amount reaches the target amount, 
+                      the event will be shut down and moved to "Past Events". 
+                      Users will no longer be able to donate to this event.</p>
                   </div>
 
                   <p class="display-1 text--primary">
@@ -90,8 +108,8 @@
                   </p>
                   <div class="body-1 text--primary">
                     <p>Go to the <kbd>PROFILE</kbd> page.</p>
-                    <p>We only support "text" post.</p>
-                    <p>People and you can reply your posts.</p>
+                    <p>We only support pure text posts.</p>
+                    <p>Donors can reply to your posts.</p>
                   </div>
                 </v-card-text>
               </v-card>
@@ -112,33 +130,32 @@
                     STEP 1  Log In
                   </p>
                   <div class="body-1 text--primary">
-                    <p>You do NOT need to create any account in our website.</p>
+                    <p>You do NOT need to create an account in our website.</p>
                     <p>Log in with your MetaMask account.</p>
-                    <p>If you do NOT have a MetaMask account, go create one and store some money, 
-                      and you can get started.</p>
+                    <p>If you do NOT have a MetaMask account, create an account and deposit cryptocurrency.</p>
                   </div>
 
                   <p class="display-1 text--primary">
                     STEP 2  Explore
                   </p>
                   <div class="body-1 text--primary">
-                    <p>On the <kbd>HOME</kbd> page, you can get recent events categorized by different tags.</p>
-                    <p>You can also see the information, posts, ongoing events and past events of organizations.</p>
+                    <p>On the <kbd>HOME</kbd> page, you can explore ongoing events by category.</p>
+                    <p>Information, posts, ongoing events and past events of organizations are also available.</p>
                   </div>
 
                   <p class="display-1 text--primary">
-                    STEP 3  Evaluation
+                    STEP 3  Feedback
                   </p>
                   <div class="body-1 text--primary">
-                    <p>You can evaluate an organization or an event by thumbing up or down.</p>
-                    <p>You can leave comments to events or below posts by organizations to tell people what you think.</p>
+                    <p>Provide feedback for an organization or an event by pressing thumbs up or down.</p>
+                    <p>You can leave comments to events or below posts by organizations.</p>
                   </div>
 
                   <p class="display-1 text--primary">
                     STEP 4  Donate
                   </p>
                   <div class="body-1 text--primary">
-                    <p>On the event page, you can see all information about this event.</p>
+                    <p>Information of an event is displayed on the event page.</p>
                     <p>Click <kbd>DONATE</kbd> and enter the amount you want to donate.</p>
                   </div>
                 </v-card-text>
@@ -151,7 +168,7 @@
     <!-- Goal -->
     <v-container>
       <br/><br/>
-      <div class="display-2 light-green--text text--darken-2">GOAL</div>
+      <div class="display-2 light-green--text font-weight-bold text--darken-2">GOAL</div>
       <br/><br/>
       <v-row justify="space-around">
         <v-col cols="3" align="center">
@@ -175,11 +192,12 @@
     <br/><br/><br/>
     <v-btn
       to="/home"
-      class="display-1 font-weight-bold"
+      rounded
+      class="display-1 font-weight"
       width="250"
       height="75"
       depressed
-      color="yellow accent-4"
+      color="yellow darken-2"
       dark
     >
       START NOW
